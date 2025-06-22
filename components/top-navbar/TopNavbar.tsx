@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Bell, Search, Menu, ChevronDown } from "lucide-react";
+import { ModeToggle } from "../theme-provider/theme-toggle";
 
 interface TopNavbarProps {
   pageTitle?: string;
@@ -47,10 +48,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
 
       {/* Right side - Search, notifications, user */}
       <div className="flex items-center space-x-3">
-        {/* Search */}
-        <Button variant="ghost" size="icon" className="hidden sm:flex">
-          <Search className="h-4 w-4" />
-        </Button>
+        <ModeToggle />
 
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative">

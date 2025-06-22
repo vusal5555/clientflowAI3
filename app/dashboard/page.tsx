@@ -150,7 +150,7 @@ const DashboardPage = () => {
                   Manage and track your project progress
                 </p>
               </div>
-              <Button className="w-full sm:w-auto">
+              <Button className="w-full sm:w-auto cursor-pointer">
                 <Plus className="mr-2 h-4 w-4" />
                 New Project
               </Button>

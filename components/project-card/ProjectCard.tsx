@@ -19,6 +19,7 @@ import {
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
+import Link from "next/link";
 
 export interface Project {
   id: string;
@@ -86,76 +87,78 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   };
 
   return (
-    <Card
-      className={cn(
-        "group hover:shadow-lg transition-all duration-200 cursor-pointer border-border hover:border-primary/20",
-        className
-      )}
-      onClick={() => onClick?.(project)}
-    >
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <CardTitle className="text-lg font-semibold group-hover:text-primary transition-colors">
-              {project.title}
-            </CardTitle>
-            <CardDescription className="text-sm text-muted-foreground line-clamp-2">
-              {project.description}
-            </CardDescription>
+    <Link href={`/projects/${project.id}`}>
+      <Card
+        className={cn(
+          "group hover:shadow-lg transition-all duration-200 cursor-pointer border-border hover:border-primary/20",
+          className
+        )}
+        onClick={() => onClick?.(project)}
+      >
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between">
+            <div className="space-y-1">
+              <CardTitle className="text-lg font-semibold group-hover:text-primary transition-colors">
+                {project.title}
+              </CardTitle>
+              <CardDescription className="text-sm text-muted-foreground line-clamp-2">
+                {project.description}
+              </CardDescription>
+            </div>
+            <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
           </div>
-          <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-        </div>
-      </CardHeader>
+        </CardHeader>
 
-      <CardContent className="space-y-4">
-        {/* Status and Priority */}
-        <div className="flex items-center justify-between">
-          <Badge
-            variant="secondary"
-            className={cn(
-              "flex items-center gap-1",
-              getStatusColor(project.status)
-            )}
-          >
-            {getStatusIcon(project.status)}
-            {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
-          </Badge>
-          <Badge
-            variant="outline"
-            className={cn("text-xs", getPriorityColor(project.priority))}
-          >
-            {project.priority.charAt(0).toUpperCase() +
-              project.priority.slice(1)}
-          </Badge>
-        </div>
+        <CardContent className="space-y-4">
+          {/* Status and Priority */}
+          <div className="flex items-center justify-between">
+            <Badge
+              variant="secondary"
+              className={cn(
+                "flex items-center gap-1",
+                getStatusColor(project.status)
+              )}
+            >
+              {getStatusIcon(project.status)}
+              {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+            </Badge>
+            <Badge
+              variant="outline"
+              className={cn("text-xs", getPriorityColor(project.priority))}
+            >
+              {project.priority.charAt(0).toUpperCase() +
+                project.priority.slice(1)}
+            </Badge>
+          </div>
 
-        {/* Progress Bar */}
-        <div className="space-y-2">
+          {/* Progress Bar */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>Progress</span>
+              <span>{project.progress}%</span>
+            </div>
+            <div className="w-full bg-secondary rounded-full h-2">
+              <div
+                className="bg-primary h-2 rounded-full transition-all duration-300"
+                style={{ width: `${project.progress}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Project Meta */}
           <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>Progress</span>
-            <span>{project.progress}%</span>
+            <div className="flex items-center gap-1">
+              <Calendar className="h-3 w-3" />
+              <span>{project.dueDate}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Users className="h-3 w-3" />
+              <span>{project.teamSize} members</span>
+            </div>
           </div>
-          <div className="w-full bg-secondary rounded-full h-2">
-            <div
-              className="bg-primary h-2 rounded-full transition-all duration-300"
-              style={{ width: `${project.progress}%` }}
-            />
-          </div>
-        </div>
-
-        {/* Project Meta */}
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <Calendar className="h-3 w-3" />
-            <span>{project.dueDate}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Users className="h-3 w-3" />
-            <span>{project.teamSize} members</span>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </Link>
   );
 };
 
