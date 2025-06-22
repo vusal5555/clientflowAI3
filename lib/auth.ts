@@ -18,4 +18,10 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: false,
   },
+
+  api: {
+    crossSubDomainCookies: {
+      enabled: true,
+    },
+  },
 });

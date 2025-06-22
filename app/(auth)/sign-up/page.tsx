@@ -20,6 +20,12 @@ export default function SignUpPage() {
   const [error, setError] = useState("");
   const router = useRouter();
 
+  const session = authClient.useSession();
+
+  if (session.data) {
+    router.push("/dashboard");
+  }
+
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
