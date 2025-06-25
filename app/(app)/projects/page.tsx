@@ -4,6 +4,7 @@ import ProjectOverview from "@/components/ProjectOverview";
 const ProjectsPage = () => {
   // Sample project data
   const sampleProject = {
+    id: "1",
     title: "E-commerce Platform Redesign",
     description:
       "Complete redesign of the company's e-commerce platform to improve user experience and increase conversion rates. Includes new checkout flow, product catalog improvements, and mobile optimization.",
@@ -15,6 +16,7 @@ const ProjectsPage = () => {
   };
 
   const sampleProject2 = {
+    id: "2",
     title: "Mobile App Development",
     description:
       "Development of a cross-platform mobile application for iOS and Android using React Native. Features include user authentication, real-time messaging, and push notifications.",
@@ -26,6 +28,7 @@ const ProjectsPage = () => {
   };
 
   const sampleProject3 = {
+    id: "3",
     title: "Data Analytics Dashboard",
     description:
       "Creation of an interactive dashboard for business intelligence and data visualization. Integrates with multiple data sources and provides real-time insights.",

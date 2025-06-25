@@ -3,8 +3,10 @@
 import React, { useState, useEffect } from "react";
 import ProjectCard from "@/components/project-card";
 import { Button } from "@/components/ui/button";
-import { Plus, Filter, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { mockProjects, type Project } from "@/lib/mock-data";
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import DashboardStats from "@/components/dashboard/DashboardStats";
 
 const DashboardPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -32,93 +34,13 @@ const DashboardPage = () => {
     // Handle project click - could navigate to project detail page
   };
 
-  const getStatusCount = (status: Project["status"]) => {
-    return projects.filter((project) => project.status === status).length;
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6">
       {/* Header Section */}
-      <div className="mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-              Projects Overview
-            </h2>
-            <p className="text-slate-600 dark:text-slate-300 mt-2">
-              Manage and track your project progress
-            </p>
-          </div>
-          <Button className="w-full sm:w-auto cursor-pointer bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0">
-            <Plus className="mr-2 h-4 w-4" />
-            New Project
-          </Button>
-        </div>
-      </div>
+      <DashboardHeader />
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                Active
-              </p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-white">
-                {getStatusCount("active")}
-              </p>
-            </div>
-            <div className="h-10 w-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-              <div className="h-5 w-5 bg-green-600 dark:bg-green-400 rounded-full"></div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                Completed
-              </p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-white">
-                {getStatusCount("completed")}
-              </p>
-            </div>
-            <div className="h-10 w-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-              <div className="h-5 w-5 bg-blue-600 dark:bg-blue-400 rounded-full"></div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                On Hold
-              </p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-white">
-                {getStatusCount("on-hold")}
-              </p>
-            </div>
-            <div className="h-10 w-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
-              <div className="h-5 w-5 bg-yellow-600 dark:bg-yellow-400 rounded-full"></div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                Total
-              </p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-white">
-                {projects.length}
-              </p>
-            </div>
-            <div className="h-10 w-10 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center">
-              <div className="h-5 w-5 bg-slate-600 dark:bg-slate-400 rounded-full"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <DashboardStats projects={projects} />
 
       {/* Filters and Search */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
