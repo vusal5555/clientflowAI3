@@ -4,8 +4,26 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Bell, Search, Menu, ChevronDown } from "lucide-react";
+import {
+  Bell,
+  Search,
+  Menu,
+  ChevronDown,
+  LogOut,
+  User,
+  Settings,
+} from "lucide-react";
 import { ModeToggle } from "../theme-provider/theme-toggle";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { authClient } from "@/lib/auth.client";
+import { useRouter } from "next/navigation";
 
 interface TopNavbarProps {
   pageTitle?: string;
@@ -18,6 +36,18 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
   className,
   onMenuClick,
 }) => {
+  const router = useRouter();
+
+  const logout = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/sign-in"); // redirect to login page
+        },
+      },
+    });
+  };
+
   return (
     <header
       className={cn(
@@ -57,16 +87,44 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
         </Button>
 
         {/* User Avatar */}
-        <div className="flex items-center space-x-2">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src="/api/placeholder/32/32" alt="User" />
-            <AvatarFallback>JD</AvatarFallback>
-          </Avatar>
-          <div className="hidden sm:flex items-center space-x-1">
-            <span className="text-sm font-medium">John Doe</span>
-            <ChevronDown className="h-3 w-3 text-muted-foreground" />
-          </div>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="flex items-center space-x-2 p-2">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src="/api/placeholder/32/32" alt="User" />
+                <AvatarFallback>JD</AvatarFallback>
+              </Avatar>
+              <div className="hidden sm:flex items-center space-x-1">
+                <span className="text-sm font-medium">John Doe</span>
+                <ChevronDown className="h-3 w-3 text-muted-foreground" />
+              </div>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none">John Doe</p>
+                <p className="text-xs leading-none text-muted-foreground">
+                  john.doe@example.com
+                </p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <User className="mr-2 h-4 w-4" />
+              <span>Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={logout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );

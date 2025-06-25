@@ -43,6 +43,9 @@ const navigationItems = [
 const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   const pathname = usePathname();
 
+  const date = new Date();
+  const year = date.getFullYear();
+
   return (
     <div
       className={cn(
@@ -82,7 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
       {/* Footer */}
       <div className="p-4 border-t border-border">
         <div className="text-xs text-muted-foreground text-center">
-          © 2024 ClientFlow
+          © {year} ClientFlow
         </div>
       </div>
     </div>
