@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { type Project } from "@/lib/mock-data";
 
 import {
   Calendar,
@@ -20,17 +21,6 @@ import {
   AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
-
-export interface Project {
-  id: string;
-  title: string;
-  description: string;
-  status: "active" | "completed" | "on-hold" | "cancelled";
-  progress: number;
-  dueDate: string;
-  teamSize: number;
-  priority: "low" | "medium" | "high";
-}
 
 interface ProjectCardProps {
   project: Project;
