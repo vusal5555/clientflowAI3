@@ -51,7 +51,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
   return (
     <header
       className={cn(
-        "flex h-16 items-center justify-between px-6 border-b border-border bg-background",
+        "flex h-16 items-center justify-between px-6 border-b border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm",
         className
       )}
     >
@@ -60,20 +60,24 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className="md:hidden text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50"
           onClick={onMenuClick}
         >
           <Menu className="h-5 w-5" />
         </Button>
 
         <div className="hidden md:block">
-          <h1 className="text-xl font-semibold">{pageTitle}</h1>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
+            {pageTitle}
+          </h1>
         </div>
       </div>
 
       {/* Center - Page title for mobile */}
       <div className="md:hidden">
-        <h1 className="text-lg font-semibold">{pageTitle}</h1>
+        <h1 className="text-lg font-semibold text-slate-900 dark:text-white">
+          {pageTitle}
+        </h1>
       </div>
 
       {/* Right side - Search, notifications, user */}
@@ -81,45 +85,62 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
         <ModeToggle />
 
         {/* Notifications */}
-        <Button variant="ghost" size="icon" className="relative">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50"
+        >
           <Bell className="h-4 w-4" />
-          <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
+          <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full border-2 border-white dark:border-slate-800"></span>
         </Button>
 
         {/* User Avatar */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center space-x-2 p-2">
-              <Avatar className="h-8 w-8">
+            <Button
+              variant="ghost"
+              className="flex items-center space-x-2 p-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50"
+            >
+              <Avatar className="h-8 w-8 border-2 border-slate-200 dark:border-slate-600">
                 <AvatarImage src="/api/placeholder/32/32" alt="User" />
-                <AvatarFallback>JD</AvatarFallback>
+                <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-semibold">
+                  JD
+                </AvatarFallback>
               </Avatar>
               <div className="hidden sm:flex items-center space-x-1">
-                <span className="text-sm font-medium">John Doe</span>
-                <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                <span className="text-sm font-medium text-slate-900 dark:text-white">
+                  John Doe
+                </span>
+                <ChevronDown className="h-3 w-3 text-slate-500 dark:text-slate-400" />
               </div>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>
+          <DropdownMenuContent
+            align="end"
+            className="w-56 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm border border-slate-200 dark:border-slate-700"
+          >
+            <DropdownMenuLabel className="text-slate-900 dark:text-white">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">John Doe</p>
-                <p className="text-xs leading-none text-muted-foreground">
+                <p className="text-xs leading-none text-slate-500 dark:text-slate-400">
                   john.doe@example.com
                 </p>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-slate-200 dark:bg-slate-700" />
+            <DropdownMenuItem className="text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50">
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem className="text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50">
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={logout}>
+            <DropdownMenuSeparator className="bg-slate-200 dark:bg-slate-700" />
+            <DropdownMenuItem
+              onClick={logout}
+              className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
+            >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>

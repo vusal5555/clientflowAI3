@@ -49,15 +49,19 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   return (
     <div
       className={cn(
-        "flex h-full w-64 flex-col bg-background border-r border-border",
+        "flex h-full w-64 flex-col bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border-r border-slate-200 dark:border-slate-700",
         className
       )}
     >
       {/* Logo/Brand */}
-      <div className="flex h-16 items-center px-6 border-b border-border">
+      <div className="flex h-16 items-center px-6 border-b border-slate-200 dark:border-slate-700">
         <Link href="/" className="flex items-center space-x-2">
-          <Home className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold">ClientFlow</span>
+          <div className="h-8 w-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <Home className="h-5 w-5 text-white" />
+          </div>
+          <span className="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+            ClientFlow
+          </span>
         </Link>
       </div>
 
@@ -70,12 +74,21 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
               <Button
                 variant={isActive ? "secondary" : "ghost"}
                 className={cn(
-                  "w-full justify-start space-x-3 h-12",
-                  isActive && "bg-secondary text-secondary-foreground"
+                  "w-full justify-start space-x-3 h-12 transition-all duration-200",
+                  isActive
+                    ? "bg-gradient-to-r from-blue-500/10 to-purple-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 shadow-sm"
+                    : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50"
                 )}
               >
-                <item.icon className="h-5 w-5" />
-                <span>{item.name}</span>
+                <item.icon
+                  className={cn(
+                    "h-5 w-5",
+                    isActive
+                      ? "text-blue-600 dark:text-blue-400"
+                      : "text-slate-500 dark:text-slate-400"
+                  )}
+                />
+                <span className="font-medium">{item.name}</span>
               </Button>
             </Link>
           );
@@ -83,8 +96,8 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-border">
-        <div className="text-xs text-muted-foreground text-center">
+      <div className="p-4 border-t border-slate-200 dark:border-slate-700">
+        <div className="text-xs text-slate-500 dark:text-slate-400 text-center">
           © {year} ClientFlow
         </div>
       </div>

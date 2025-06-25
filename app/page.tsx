@@ -54,7 +54,8 @@ export default function Home() {
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 text-lg"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700
+                 text-white px-8 py-3 text-lg"
               >
                 Join the Waitlist
                 <ArrowRight className="w-5 h-5 ml-2" />
@@ -146,7 +147,10 @@ export default function Home() {
                   <div className="text-3xl mb-2">{app.icon}</div>
                   <div className="font-semibold">{app.name}</div>
                 </div>
-                <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                <div
+                  className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center
+                 text-white text-xs font-bold"
+                >
                   {index + 1}
                 </div>
               </div>
@@ -263,7 +267,8 @@ export default function Home() {
 
               <Button
                 size="lg"
-                className="mt-8 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white"
+                className="mt-8 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600
+                 hover:to-pink-700 text-white"
               >
                 See AI in Action
                 <ArrowRight className="w-5 h-5 ml-2" />
@@ -409,7 +414,8 @@ export default function Home() {
               </div>
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 h-12"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600
+                 hover:to-purple-700 text-white px-8 h-12"
               >
                 Get Early Access
                 <ArrowRight className="w-5 h-5 ml-2" />

@@ -106,19 +106,19 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
               Projects Overview
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-slate-600 dark:text-slate-300 mt-2">
               Manage and track your project progress
             </p>
           </div>
-          <Button className="w-full sm:w-auto cursor-pointer">
+          <Button className="w-full sm:w-auto cursor-pointer bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0">
             <Plus className="mr-2 h-4 w-4" />
             New Project
           </Button>
@@ -127,55 +127,63 @@ const DashboardPage = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">
+              <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
                 Active
               </p>
-              <p className="text-2xl font-bold">{getStatusCount("active")}</p>
+              <p className="text-2xl font-bold text-slate-900 dark:text-white">
+                {getStatusCount("active")}
+              </p>
             </div>
-            <div className="h-8 w-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-              <div className="h-4 w-4 bg-green-600 rounded-full"></div>
+            <div className="h-10 w-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+              <div className="h-5 w-5 bg-green-600 dark:bg-green-400 rounded-full"></div>
             </div>
           </div>
         </div>
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">
+              <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
                 Completed
               </p>
-              <p className="text-2xl font-bold">
+              <p className="text-2xl font-bold text-slate-900 dark:text-white">
                 {getStatusCount("completed")}
               </p>
             </div>
-            <div className="h-8 w-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-              <div className="h-4 w-4 bg-blue-600 rounded-full"></div>
+            <div className="h-10 w-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+              <div className="h-5 w-5 bg-blue-600 dark:bg-blue-400 rounded-full"></div>
             </div>
           </div>
         </div>
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">
+              <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
                 On Hold
               </p>
-              <p className="text-2xl font-bold">{getStatusCount("on-hold")}</p>
+              <p className="text-2xl font-bold text-slate-900 dark:text-white">
+                {getStatusCount("on-hold")}
+              </p>
             </div>
-            <div className="h-8 w-8 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center">
-              <div className="h-4 w-4 bg-yellow-600 rounded-full"></div>
+            <div className="h-10 w-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
+              <div className="h-5 w-5 bg-yellow-600 dark:bg-yellow-400 rounded-full"></div>
             </div>
           </div>
         </div>
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Total</p>
-              <p className="text-2xl font-bold">{projects.length}</p>
+              <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                Total
+              </p>
+              <p className="text-2xl font-bold text-slate-900 dark:text-white">
+                {projects.length}
+              </p>
             </div>
-            <div className="h-8 w-8 bg-gray-100 dark:bg-gray-900 rounded-full flex items-center justify-center">
-              <div className="h-4 w-4 bg-gray-600 rounded-full"></div>
+            <div className="h-10 w-10 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center">
+              <div className="h-5 w-5 bg-slate-600 dark:bg-slate-400 rounded-full"></div>
             </div>
           </div>
         </div>
@@ -184,13 +192,13 @@ const DashboardPage = () => {
       {/* Filters and Search */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-500 dark:text-slate-400" />
           <input
             type="text"
             placeholder="Search projects..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className="w-full pl-10 pr-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
           />
         </div>
         <select
@@ -198,7 +206,7 @@ const DashboardPage = () => {
           onChange={(e) =>
             setStatusFilter(e.target.value as Project["status"] | "all")
           }
-          className="px-4 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+          className="px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
         >
           <option value="all">All Status</option>
           <option value="active">Active</option>
@@ -221,19 +229,23 @@ const DashboardPage = () => {
 
       {/* Empty State */}
       {filteredProjects.length === 0 && (
-        <div className="text-center py-12">
-          <div className="mx-auto h-12 w-12 text-muted-foreground mb-4">
-            <Search className="h-12 w-12" />
+        <div className="text-center py-16">
+          <div className="mx-auto h-16 w-16 text-slate-400 dark:text-slate-500 mb-6">
+            <Search className="h-16 w-16" />
           </div>
-          <h3 className="text-lg font-semibold mb-2">No projects found</h3>
-          <p className="text-muted-foreground mb-4">
-            Try adjusting your search or filter criteria
+          <h3 className="text-xl font-semibold mb-3 text-slate-900 dark:text-white">
+            No projects found
+          </h3>
+          <p className="text-slate-600 dark:text-slate-300 mb-6 max-w-md mx-auto">
+            Try adjusting your search or filter criteria to find what you're
+            looking for
           </p>
           <Button
             onClick={() => {
               setSearchTerm("");
               setStatusFilter("all");
             }}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0"
           >
             Clear filters
           </Button>

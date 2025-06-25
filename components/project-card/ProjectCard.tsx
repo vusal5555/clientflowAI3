@@ -46,15 +46,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const getStatusColor = (status: Project["status"]) => {
     switch (status) {
       case "active":
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800/50";
       case "completed":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800/50";
       case "on-hold":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300";
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800/50";
       case "cancelled":
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border-red-200 dark:border-red-800/50";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300";
+        return "bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600";
     }
   };
 
@@ -76,13 +76,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const getPriorityColor = (priority: Project["priority"]) => {
     switch (priority) {
       case "high":
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border-red-200 dark:border-red-800/50";
       case "medium":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300";
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800/50";
       case "low":
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800/50";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300";
+        return "bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600";
     }
   };
 
@@ -90,22 +90,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     <Link href={`/projects/${project.id}`}>
       <Card
         className={cn(
-          "group hover:shadow-lg transition-all duration-200 cursor-pointer border-border hover:border-primary/20",
+          "group hover:shadow-xl transition-all duration-300 cursor-pointer border-slate-200 dark:border-slate-700 hover:border-blue-500/30 dark:hover:border-blue-400/30 bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm hover:bg-white/90 dark:hover:bg-slate-800/70",
           className
         )}
         onClick={() => onClick?.(project)}
       >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
-            <div className="space-y-1">
-              <CardTitle className="text-lg font-semibold group-hover:text-primary transition-colors">
+            <div className="space-y-2">
+              <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 {project.title}
               </CardTitle>
-              <CardDescription className="text-sm text-muted-foreground line-clamp-2">
+              <CardDescription className="text-sm text-slate-600 dark:text-slate-300 line-clamp-2">
                 {project.description}
               </CardDescription>
             </div>
-            <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+            <ArrowUpRight className="h-4 w-4 text-slate-400 dark:text-slate-500 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors" />
           </div>
         </CardHeader>
 
@@ -115,7 +115,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             <Badge
               variant="secondary"
               className={cn(
-                "flex items-center gap-1",
+                "flex items-center gap-1 border",
                 getStatusColor(project.status)
               )}
             >
@@ -124,7 +124,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </Badge>
             <Badge
               variant="outline"
-              className={cn("text-xs", getPriorityColor(project.priority))}
+              className={cn(
+                "text-xs border",
+                getPriorityColor(project.priority)
+              )}
             >
               {project.priority.charAt(0).toUpperCase() +
                 project.priority.slice(1)}
@@ -133,20 +136,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
           {/* Progress Bar */}
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-300">
               <span>Progress</span>
               <span>{project.progress}%</span>
             </div>
-            <div className="w-full bg-secondary rounded-full h-2">
+            <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
               <div
-                className="bg-primary h-2 rounded-full transition-all duration-300"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${project.progress}%` }}
               />
             </div>
           </div>
 
           {/* Project Meta */}
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
             <div className="flex items-center gap-1">
               <Calendar className="h-3 w-3" />
               <span>{project.dueDate}</span>
