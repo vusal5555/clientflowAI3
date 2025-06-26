@@ -16,7 +16,6 @@ export interface ShareButtonProps {
 
 const ShareButton: React.FC<ShareButtonProps> = ({
   projectId,
-  projectName = "Project",
   onShare,
   className,
 }) => {

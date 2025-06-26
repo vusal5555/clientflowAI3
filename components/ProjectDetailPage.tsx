@@ -4,7 +4,9 @@ import React from "react";
 import ProjectOverview from "@/components/ProjectOverview";
 import AIStatusUpdates from "@/components/project-sections/AIStatusUpdates";
 import TodoList from "@/components/project-sections/TodoList";
-import FileUploads from "@/components/project-sections/FileUploads";
+import FileUploads, {
+  UploadedFile,
+} from "@/components/project-sections/FileUploads";
 import ClientFeedback from "@/components/project-sections/ClientFeedback";
 import ShareButton from "@/components/project-sections/ShareButton";
 import { type Project } from "@/lib/mock-data";
@@ -26,8 +28,8 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
     console.log("Saving AI update:", update);
   };
 
-  const handleTodoChange = (todos: any[]) => {
-    console.log("Todos updated:", todos);
+  const handleTodoChange = () => {
+    console.log("Todo changed");
   };
 
   const handleFileUpload = (file: File) => {
@@ -38,7 +40,7 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
     console.log("File deleted:", fileId);
   };
 
-  const handleFileDownload = (file: any) => {
+  const handleFileDownload = (file: UploadedFile) => {
     console.log("File downloaded:", file.name);
   };
 
@@ -74,6 +76,7 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
         <div className="xl:col-span-2 space-y-6">
           {/* Project Overview */}
           <ProjectOverview
+            id={project.id}
             title={project.title}
             description={project.description}
             progress={project.progress}

@@ -127,8 +127,8 @@ export default function Home() {
               Juggling Slack, Notion, Trello, and endless emails?
             </h2>
             <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-              Your clients are confused. Your team is overwhelmed. It's time to
-              simplify.
+              Your clients are confused. Your team is overwhelmed. It&apos;s
+              time to simplify.
             </p>
           </div>
 
@@ -345,7 +345,7 @@ export default function Home() {
               Loved by agency owners
             </h2>
             <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-              Join the growing community of professionals who've simplified
+              Join the growing community of professionals who&apos;ve simplified
               their client workflows
             </p>
           </div>
@@ -380,7 +380,7 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-slate-300 mb-4 italic">
-                    "{testimonial.quote}"
+                    &quot;{testimonial.quote}&quot;
                   </p>
                   <p className="text-slate-400 font-semibold">
                     — {testimonial.author}

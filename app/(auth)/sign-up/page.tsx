@@ -65,7 +65,7 @@ export default function SignUpPage() {
           callbackURL: "/dashboard",
         },
         {
-          onSuccess: (ctx) => {
+          onSuccess: () => {
             router.push("/dashboard");
           },
         }

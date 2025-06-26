@@ -43,7 +43,7 @@ export default function SignInPage() {
     }
 
     try {
-      const { data, error } = await authClient.signIn.email(
+      const { error } = await authClient.signIn.email(
         {
           /**
            * The user email
@@ -64,7 +64,7 @@ export default function SignInPage() {
           rememberMe: false,
         },
         {
-          onSuccess: (ctx) => {
+          onSuccess: () => {
             router.push("/dashboard");
           },
         }
@@ -130,7 +130,7 @@ export default function SignInPage() {
           </form>
 
           <div className="mt-6 text-center text-sm">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/sign-up"
               className="text-blue-600 hover:text-blue-500 font-medium"

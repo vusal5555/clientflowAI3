@@ -9,11 +9,11 @@ import {
   Download,
   Trash2,
   FileText,
-  Image,
   File,
   Calendar,
   FolderOpen,
 } from "lucide-react";
+import Image from "next/image";
 
 export interface UploadedFile {
   id: string;
@@ -44,9 +44,17 @@ const FileUploads: React.FC<FileUploadsProps> = ({
 
   const getFileIcon = (type: string) => {
     if (type.includes("image"))
-      return <Image className="h-6 w-6 text-blue-500" />;
+      return (
+        <Image
+          className="h-6 w-6 text-blue-500"
+          alt="Image"
+          src={"/images/file-icons/image.png"}
+        />
+      );
     if (type.includes("pdf"))
       return <FileText className="h-6 w-6 text-red-500" />;
+    if (type.includes("figma") || type.includes("design"))
+      return <File className="h-6 w-6 text-purple-500" />;
     if (type.includes("figma") || type.includes("design"))
       return <File className="h-6 w-6 text-purple-500" />;
     return <File className="h-6 w-6 text-slate-500" />;

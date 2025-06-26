@@ -4,15 +4,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Bell,
-  Search,
-  Menu,
-  ChevronDown,
-  LogOut,
-  User,
-  Settings,
-} from "lucide-react";
+import { Bell, Menu, ChevronDown, LogOut, User, Settings } from "lucide-react";
 import { ModeToggle } from "../theme-provider/theme-toggle";
 import {
   DropdownMenu,

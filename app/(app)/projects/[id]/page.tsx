@@ -15,7 +15,7 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
             Project Not Found
           </h1>
           <p className="text-slate-600 dark:text-slate-300">
-            The project you're looking for doesn't exist.
+            The project you&apos;re looking for doesn&apos;t exist.
           </p>
         </div>
       </div>
