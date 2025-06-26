@@ -146,7 +146,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </div>
             <div className="flex items-center gap-1">
               <Users className="h-3 w-3" />
-              <span>{project.teamSize} members</span>
             </div>
           </div>
         </CardContent>

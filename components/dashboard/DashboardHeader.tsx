@@ -1,6 +1,7 @@
+"use client";
+
 import React from "react";
-import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
+import CreateProjectDialog from "../CreateProjectDialog";
 
 const DashboardHeader = () => {
   return (
@@ -14,10 +15,8 @@ const DashboardHeader = () => {
             Manage and track your project progress
           </p>
         </div>
-        <Button className="w-full sm:w-auto cursor-pointer bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0">
-          <Plus className="mr-2 h-4 w-4" />
-          New Project
-        </Button>
+
+        <CreateProjectDialog />
       </div>
     </div>
   );
