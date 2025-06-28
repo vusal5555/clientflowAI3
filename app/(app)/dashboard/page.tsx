@@ -10,7 +10,9 @@ const DashboardPage = async () => {
 
   let projects = [];
   try {
-    const response = await fetch(`${baseUrl}/api/projects`);
+    const response = await fetch(`${baseUrl}/api/projects`, {
+      cache: "force-cache",
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

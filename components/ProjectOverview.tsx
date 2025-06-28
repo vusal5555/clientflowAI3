@@ -15,7 +15,7 @@ export interface ProjectOverviewProps {
   title: string;
   description: string;
   progress: number;
-  status: "active" | "completed" | "on-hold" | "cancelled";
+  status: "active" | "completed" | "archived" | "on-hold" | "cancelled";
   priority: "high" | "medium" | "low";
   dueDate: string;
   teamSize: number;
@@ -33,9 +33,14 @@ const statusConfig = {
     variant: "secondary" as const,
     color: "bg-blue-500",
   },
+  archived: {
+    label: "Archived",
+    variant: "destructive" as const,
+    color: "bg-red-500",
+  },
   "on-hold": {
     label: "On Hold",
-    variant: "outline" as const,
+    variant: "secondary" as const,
     color: "bg-yellow-500",
   },
   cancelled: {
@@ -62,8 +67,11 @@ const ProjectOverview: React.FC<ProjectOverviewProps> = ({
   className,
   id,
 }) => {
-  const statusInfo = statusConfig[status];
-  const priorityInfo = priorityConfig[priority];
+  const statusInfo =
+    statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
+  const priorityInfo =
+    priorityConfig[priority as keyof typeof priorityConfig] ||
+    priorityConfig.medium;
 
   return (
     <Link href={`/projects/${id}`}>

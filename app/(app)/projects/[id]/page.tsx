@@ -5,9 +5,28 @@ import { mockProjects } from "@/lib/mock-data";
 const ProjectPage = async ({ params }: { params: { id: string } }) => {
   const { id } = await params;
 
-  const project = mockProjects.find((project) => project.id === id);
+  let project;
+  try {
+    const response = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+      }/api/projects/${id}`,
+      {
+        cache: "force-cache",
+      }
+    );
 
-  if (!project) {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    project = await response.json();
+  } catch (error) {
+    console.error("Error fetching project:", error);
+    project = null;
+  }
+
+  if (!project || !project.id) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6">
         <div className="text-center">

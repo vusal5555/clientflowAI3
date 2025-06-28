@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,17 +21,25 @@ const ShareButton: React.FC<ShareButtonProps> = ({
 }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [showLink, setShowLink] = useState(false);
+  const [shareLink, setShareLink] = useState("");
 
-  const shareLink = `${window.location.origin}/shared/project/${projectId}`;
+  useEffect(() => {
+    // Only set the share link when we're in the browser
+    if (typeof window !== "undefined") {
+      setShareLink(`${window.location.origin}/shared/project/${projectId}`);
+    }
+  }, [projectId]);
 
   const handleShare = () => {
     setShowLink(true);
-    if (onShare) {
+    if (onShare && shareLink) {
       onShare(shareLink);
     }
   };
 
   const handleCopyLink = async () => {
+    if (!shareLink) return;
+
     try {
       await navigator.clipboard.writeText(shareLink);
       setIsCopied(true);
@@ -51,7 +59,9 @@ const ShareButton: React.FC<ShareButtonProps> = ({
   };
 
   const handleOpenLink = () => {
-    window.open(shareLink, "_blank");
+    if (shareLink) {
+      window.open(shareLink, "_blank");
+    }
   };
 
   return (
