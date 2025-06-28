@@ -144,7 +144,7 @@ const ProjectOverview: React.FC<ProjectOverviewProps> = ({
             </div>
 
             {/* Team Size */}
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <Users className="w-4 h-4 text-slate-500 dark:text-slate-400" />
               <span className="text-sm text-slate-600 dark:text-slate-300">
                 Team Size:
@@ -152,7 +152,7 @@ const ProjectOverview: React.FC<ProjectOverviewProps> = ({
               <span className="text-sm font-medium text-slate-900 dark:text-white">
                 {teamSize} members
               </span>
-            </div>
+            </div> */}
           </div>
         </CardContent>
       </Card>

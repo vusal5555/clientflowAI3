@@ -1,43 +1,17 @@
 import React from "react";
 import ProjectOverview from "@/components/ProjectOverview";
+import { Project } from "@/lib/mock-data";
 
-const ProjectsPage = () => {
+const ProjectsPage = async () => {
   // Sample project data
-  const sampleProject = {
-    id: "1",
-    title: "E-commerce Platform Redesign",
-    description:
-      "Complete redesign of the company's e-commerce platform to improve user experience and increase conversion rates. Includes new checkout flow, product catalog improvements, and mobile optimization.",
-    progress: 65,
-    status: "active" as const,
-    priority: "high" as const,
-    dueDate: "December 15, 2024",
-    teamSize: 8,
-  };
-
-  const sampleProject2 = {
-    id: "2",
-    title: "Mobile App Development",
-    description:
-      "Development of a cross-platform mobile application for iOS and Android using React Native. Features include user authentication, real-time messaging, and push notifications.",
-    progress: 85,
-    status: "active" as const,
-    priority: "medium" as const,
-    dueDate: "November 30, 2024",
-    teamSize: 5,
-  };
-
-  const sampleProject3 = {
-    id: "3",
-    title: "Data Analytics Dashboard",
-    description:
-      "Creation of an interactive dashboard for business intelligence and data visualization. Integrates with multiple data sources and provides real-time insights.",
-    progress: 100,
-    status: "completed" as const,
-    priority: "low" as const,
-    dueDate: "October 20, 2024",
-    teamSize: 3,
-  };
+  const projects = await fetch(
+    `${
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+    }/api/projects`,
+    {
+      cache: "force-cache",
+    }
+  ).then((res) => res.json());
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6">
@@ -57,9 +31,9 @@ const ProjectsPage = () => {
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-        <ProjectOverview {...sampleProject} />
-        <ProjectOverview {...sampleProject2} />
-        <ProjectOverview {...sampleProject3} />
+        {projects.map((project: Project) => (
+          <ProjectOverview key={project.id} {...project} />
+        ))}
       </div>
     </div>
   );
