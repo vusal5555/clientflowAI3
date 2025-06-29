@@ -1,18 +1,17 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Trash2, User } from "lucide-react";
+import { Trash2, User } from "lucide-react";
+import TodoDialog from "../todo/TodoDialog";
+import EditTodoDialog from "../todo/EditTodoDialog";
 
 export interface TodoItem {
   id: string;
   title: string;
-  completed: boolean;
+  status: "todo" | "in_progress" | "done";
   assignedTo?: {
     id: string;
     name: string;
@@ -23,75 +22,54 @@ export interface TodoItem {
 
 export interface TodoListProps {
   initialTodos?: TodoItem[];
-  teamMembers?: Array<{
-    id: string;
-    name: string;
-    avatar?: string;
-  }>;
   onTodoChange?: (todos: TodoItem[]) => void;
   className?: string;
+  projectId: number;
 }
 
 const TodoList: React.FC<TodoListProps> = ({
   initialTodos = [],
-  teamMembers = [
-    { id: "1", name: "John Doe", avatar: "" },
-    { id: "2", name: "Jane Smith", avatar: "" },
-    { id: "3", name: "Mike Johnson", avatar: "" },
-  ],
-  onTodoChange,
   className,
+  projectId,
 }) => {
   const [todos, setTodos] = useState<TodoItem[]>(initialTodos);
-  const [newTodo, setNewTodo] = useState("");
-  const [selectedMember, setSelectedMember] = useState<string>("");
 
-  const addTodo = () => {
-    if (newTodo.trim()) {
-      const todo: TodoItem = {
-        id: Date.now().toString(),
-        title: newTodo.trim(),
-        completed: false,
-        assignedTo: selectedMember
-          ? teamMembers.find((m) => m.id === selectedMember)
-          : undefined,
-        createdAt: new Date().toISOString(),
-      };
-
-      const updatedTodos = [...todos, todo];
-      setTodos(updatedTodos);
-      setNewTodo("");
-      setSelectedMember("");
-
-      if (onTodoChange) {
-        onTodoChange(updatedTodos);
+  const fetchTodos = async () => {
+    try {
+      const response = await fetch(`/api/todos`, {
+        cache: "no-store",
+      });
+      if (response.ok) {
+        const todosData = await response.json();
+        setTodos(todosData);
       }
+    } catch (error) {
+      console.error("Error fetching todos:", error);
     }
   };
 
-  const toggleTodo = (id: string) => {
-    const updatedTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    );
-    setTodos(updatedTodos);
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
-    if (onTodoChange) {
-      onTodoChange(updatedTodos);
-    }
-  };
+  const deleteTodo = async (id: number) => {
+    try {
+      const response = await fetch(`/api/todos/${id}`, {
+        method: "DELETE",
+      });
 
-  const deleteTodo = (id: string) => {
-    const updatedTodos = todos.filter((todo) => todo.id !== id);
-    setTodos(updatedTodos);
+      if (response.ok) {
+        // Remove the todo from local state immediately
+        setTodos((prevTodos) =>
+          prevTodos.filter((todo) => Number(todo.id) !== id)
+        );
 
-    if (onTodoChange) {
-      onTodoChange(updatedTodos);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      addTodo();
+        fetchTodos();
+      } else {
+        console.error("Failed to delete todo");
+      }
+    } catch (error) {
+      console.error("Error deleting todo:", error);
     }
   };
 
@@ -109,38 +87,8 @@ const TodoList: React.FC<TodoListProps> = ({
         {/* Add new todo */}
         <div className="space-y-3">
           <div className="flex gap-2">
-            <Input
-              value={newTodo}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setNewTodo(e.target.value)
-              }
-              onKeyPress={handleKeyPress}
-              placeholder="Add a new task..."
-              className="flex-1 bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-900 dark:text-white"
-            />
-            <Button
-              onClick={addTodo}
-              size="sm"
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
+            <TodoDialog projectId={projectId} fetchTodos={fetchTodos} />
           </div>
-
-          <select
-            value={selectedMember}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-              setSelectedMember(e.target.value)
-            }
-            className="w-full px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
-          >
-            <option value="">Assign to team member (optional)</option>
-            {teamMembers.map((member) => (
-              <option key={member.id} value={member.id}>
-                {member.name}
-              </option>
-            ))}
-          </select>
         </div>
 
         {/* Todo list */}
@@ -154,21 +102,15 @@ const TodoList: React.FC<TodoListProps> = ({
               <div
                 key={todo.id}
                 className={`flex items-center gap-3 p-3 rounded-lg border transition-all duration-200 ${
-                  todo.completed
+                  todo.status === "done"
                     ? "bg-slate-50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600"
                     : "bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600"
                 }`}
               >
-                <Checkbox
-                  checked={todo.completed}
-                  onCheckedChange={() => toggleTodo(todo.id)}
-                  className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
-                />
-
                 <div className="flex-1 min-w-0">
                   <p
                     className={`text-sm ${
-                      todo.completed
+                      todo.status === "done"
                         ? "line-through text-slate-500 dark:text-slate-400"
                         : "text-slate-900 dark:text-white"
                     }`}
@@ -191,14 +133,21 @@ const TodoList: React.FC<TodoListProps> = ({
                   )}
                 </div>
 
-                <Button
-                  onClick={() => deleteTodo(todo.id)}
-                  size="sm"
-                  variant="ghost"
-                  className="h-8 w-8 p-0 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                <div className="flex items-center gap-2">
+                  <EditTodoDialog
+                    projectId={projectId}
+                    fetchTodos={fetchTodos}
+                    id={todo.id}
+                  />
+                  <Button
+                    onClick={() => deleteTodo(Number(todo.id))}
+                    size="sm"
+                    variant="ghost"
+                    className="h-8 w-8 p-0 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             ))
           )}
@@ -208,12 +157,14 @@ const TodoList: React.FC<TodoListProps> = ({
         {todos.length > 0 && (
           <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-600">
             <span className="text-sm text-slate-600 dark:text-slate-300">
-              {todos.filter((t) => t.completed).length} of {todos.length}{" "}
-              completed
+              {todos.filter((t) => t.status === "done").length} of{" "}
+              {todos.length} completed
             </span>
             <Badge variant="secondary" className="text-xs">
               {Math.round(
-                (todos.filter((t) => t.completed).length / todos.length) * 100
+                (todos.filter((t) => t.status === "done").length /
+                  todos.length) *
+                  100
               )}
               %
             </Badge>

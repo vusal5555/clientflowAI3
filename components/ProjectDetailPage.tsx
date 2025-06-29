@@ -93,7 +93,11 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
           />
 
           {/* To-Do List */}
-          <TodoList onTodoChange={handleTodoChange} />
+          <TodoList
+            onTodoChange={handleTodoChange}
+            projectId={Number(project.id)}
+            initialTodos={[]}
+          />
 
           {/* File Uploads */}
           <FileUploads
