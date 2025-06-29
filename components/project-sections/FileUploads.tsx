@@ -41,12 +41,15 @@ const FileUploads: React.FC<FileUploadsProps> = ({
 }) => {
   const [files, setFiles] = useState<UploadedFile[]>(initialFiles);
   const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const getFileIcon = (type: string) => {
     if (type.includes("image"))
       return (
         <Image
           className="h-6 w-6 text-blue-500"
+          width={50}
+          height={50}
           alt="Image"
           src={"/images/file-icons/image.png"}
         />
@@ -153,6 +156,10 @@ const FileUploads: React.FC<FileUploadsProps> = ({
     }
   };
 
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <Card
       className={`bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 ${className}`}
@@ -166,7 +173,7 @@ const FileUploads: React.FC<FileUploadsProps> = ({
       <CardContent className="space-y-4">
         {/* Upload Area */}
         <div
-          className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 ${
+          className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 cursor-pointer ${
             isDragging
               ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
               : "border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500"
@@ -174,23 +181,30 @@ const FileUploads: React.FC<FileUploadsProps> = ({
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
+          onClick={handleUploadClick}
         >
           <Upload className="h-8 w-8 mx-auto mb-2 text-slate-400" />
           <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">
             Drag and drop files here, or click to browse
           </p>
           <input
+            ref={fileInputRef}
             type="file"
             onChange={handleFileUpload}
             className="hidden"
-            id="file-upload"
             accept="image/*,.pdf,.fig,.figx,.sketch,.xd"
           />
-          <label htmlFor="file-upload">
-            <Button variant="outline" size="sm" className="cursor-pointer">
-              Choose Files
-            </Button>
-          </label>
+          <Button
+            variant="outline"
+            size="sm"
+            className="cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleUploadClick();
+            }}
+          >
+            Choose Files
+          </Button>
         </div>
 
         {/* Files Grid */}
