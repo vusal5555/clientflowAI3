@@ -21,6 +21,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
+import { format } from "date-fns";
 
 interface ProjectCardProps {
   project: Project;
@@ -142,7 +143,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
             <div className="flex items-center gap-1">
               <Calendar className="h-3 w-3" />
-              <span>{project.dueDate}</span>
+              <span>{format(project.dueDate, "MMM d, yyyy")}</span>
             </div>
             <div className="flex items-center gap-1">
               <Users className="h-3 w-3" />

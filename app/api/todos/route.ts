@@ -2,6 +2,7 @@ import db from "@/db";
 import { todos } from "@/drizzle/schema";
 import { auth } from "@/lib/auth";
 import { desc } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -21,6 +22,8 @@ export async function POST(request: NextRequest) {
 
   const newTodo = await db.insert(todos).values(todo).returning();
 
+  revalidatePath("/projects");
+
   return NextResponse.json(newTodo);
 }
 
@@ -29,6 +32,8 @@ export async function GET() {
     .select()
     .from(todos)
     .orderBy(desc(todos.createdAt));
+
+  revalidatePath("/projects");
 
   return NextResponse.json(todosResult);
 }

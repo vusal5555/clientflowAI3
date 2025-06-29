@@ -1,6 +1,7 @@
 import db from "@/db";
 import { todos } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
@@ -14,6 +15,8 @@ export async function DELETE(
     .where(eq(todos.id, parseInt(id)))
     .returning();
 
+  revalidatePath("/projects");
+
   return NextResponse.json(deletedTodo);
 }
 
@@ -25,6 +28,8 @@ export async function PUT(request: NextRequest) {
     .set({ title, status, assignedTo, dueDate })
     .where(eq(todos.id, id))
     .returning();
+
+  revalidatePath("/projects");
 
   return NextResponse.json(updatedTodo);
 }

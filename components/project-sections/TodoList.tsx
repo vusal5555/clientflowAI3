@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -92,66 +92,69 @@ const TodoList: React.FC<TodoListProps> = ({
         </div>
 
         {/* Todo list */}
-        <div className="space-y-2">
-          {todos.length === 0 ? (
-            <p className="text-sm text-slate-500 dark:text-slate-400 text-center py-4">
-              No tasks yet. Add your first task above!
-            </p>
-          ) : (
-            todos.map((todo) => (
-              <div
-                key={todo.id}
-                className={`flex items-center gap-3 p-3 rounded-lg border transition-all duration-200 ${
-                  todo.status === "done"
-                    ? "bg-slate-50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600"
-                    : "bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600"
-                }`}
-              >
-                <div className="flex-1 min-w-0">
-                  <p
-                    className={`text-sm ${
-                      todo.status === "done"
-                        ? "line-through text-slate-500 dark:text-slate-400"
-                        : "text-slate-900 dark:text-white"
-                    }`}
-                  >
-                    {todo.title}
-                  </p>
 
-                  {todo.assignedTo && (
-                    <div className="flex items-center gap-2 mt-1">
-                      <Avatar className="h-5 w-5">
-                        <AvatarImage src={todo.assignedTo.avatar} />
-                        <AvatarFallback className="text-xs bg-slate-200 dark:bg-slate-600">
-                          <User className="h-3 w-3" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
-                        {todo.assignedTo.name}
-                      </span>
-                    </div>
-                  )}
-                </div>
+        <Suspense fallback={<div>Loading...</div>}>
+          <div className="space-y-2">
+            {todos.length === 0 ? (
+              <p className="text-sm text-slate-500 dark:text-slate-400 text-center py-4">
+                No tasks yet. Add your first task above!
+              </p>
+            ) : (
+              todos.map((todo) => (
+                <div
+                  key={todo.id}
+                  className={`flex items-center gap-3 p-3 rounded-lg border transition-all duration-200 ${
+                    todo.status === "done"
+                      ? "bg-slate-50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600"
+                      : "bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600"
+                  }`}
+                >
+                  <div className="flex-1 min-w-0">
+                    <p
+                      className={`text-sm ${
+                        todo.status === "done"
+                          ? "line-through text-slate-500 dark:text-slate-400"
+                          : "text-slate-900 dark:text-white"
+                      }`}
+                    >
+                      {todo.title}
+                    </p>
 
-                <div className="flex items-center gap-2">
-                  <EditTodoDialog
-                    projectId={projectId}
-                    fetchTodos={fetchTodos}
-                    id={todo.id}
-                  />
-                  <Button
-                    onClick={() => deleteTodo(Number(todo.id))}
-                    size="sm"
-                    variant="ghost"
-                    className="h-8 w-8 p-0 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                    {todo.assignedTo && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <Avatar className="h-5 w-5">
+                          <AvatarImage src={todo.assignedTo.avatar} />
+                          <AvatarFallback className="text-xs bg-slate-200 dark:bg-slate-600">
+                            <User className="h-3 w-3" />
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="text-xs text-slate-500 dark:text-slate-400">
+                          {todo.assignedTo.name}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <EditTodoDialog
+                      projectId={projectId}
+                      fetchTodos={fetchTodos}
+                      id={todo.id}
+                    />
+                    <Button
+                      onClick={() => deleteTodo(Number(todo.id))}
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 w-8 p-0 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))
-          )}
-        </div>
+              ))
+            )}
+          </div>
+        </Suspense>
 
         {/* Summary */}
         {todos.length > 0 && (

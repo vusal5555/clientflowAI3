@@ -9,6 +9,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Users, Target } from "lucide-react";
 import Link from "next/link";
+import { format } from "date-fns";
 
 export interface ProjectOverviewProps {
   id: string;
@@ -139,7 +140,7 @@ const ProjectOverview: React.FC<ProjectOverviewProps> = ({
                 Due Date:
               </span>
               <span className="text-sm font-medium text-slate-900 dark:text-white">
-                {dueDate}
+                {format(dueDate, "MMM d, yyyy")}
               </span>
             </div>
 

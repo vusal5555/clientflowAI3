@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import ProjectOverview from "@/components/ProjectOverview";
 import AIStatusUpdates from "@/components/project-sections/AIStatusUpdates";
 import TodoList from "@/components/project-sections/TodoList";
@@ -93,11 +93,13 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
           />
 
           {/* To-Do List */}
-          <TodoList
-            onTodoChange={handleTodoChange}
-            projectId={Number(project.id)}
-            initialTodos={[]}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <TodoList
+              onTodoChange={handleTodoChange}
+              projectId={Number(project.id)}
+              initialTodos={[]}
+            />
+          </Suspense>
 
           {/* File Uploads */}
           <FileUploads

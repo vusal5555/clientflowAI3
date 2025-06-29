@@ -2,6 +2,7 @@ import db from "@/db";
 import { projects } from "@/drizzle/schema";
 import { auth } from "@/lib/auth";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
       priority,
       dueDate: dueDate ? new Date(dueDate) : null,
     });
-
+    revalidatePath("/");
     return NextResponse.json(project);
   } catch (error) {
     console.error("Database error:", error);
