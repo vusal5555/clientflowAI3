@@ -31,6 +31,7 @@ import {
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export interface TodoItem {
   id: string;
@@ -52,15 +53,12 @@ interface TodoDialogProps {
   onTodoCreated?: (todo: TodoItem) => void;
   className?: string;
   projectId: number;
-  fetchTodos: () => void;
+
   id: string;
 }
 
-const TodoDialog: React.FC<TodoDialogProps> = ({
-  projectId,
-  fetchTodos,
-  id,
-}) => {
+const TodoDialog: React.FC<TodoDialogProps> = ({ projectId, id }) => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -120,7 +118,7 @@ const TodoDialog: React.FC<TodoDialogProps> = ({
           assignedTo: "",
         });
         setOpen(false);
-        fetchTodos();
+        router.refresh();
       } else {
         console.error("Failed to create todo");
       }

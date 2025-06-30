@@ -2,7 +2,7 @@ import db from "@/db";
 import { todos } from "@/drizzle/schema";
 import { auth } from "@/lib/auth";
 import { desc } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
   const newTodo = await db.insert(todos).values(todo).returning();
 
-  revalidatePath("/projects");
+  revalidateTag("todos");
 
   return NextResponse.json(newTodo);
 }
@@ -33,7 +33,7 @@ export async function GET() {
     .from(todos)
     .orderBy(desc(todos.createdAt));
 
-  revalidatePath("/projects");
+  revalidateTag("todos");
 
   return NextResponse.json(todosResult);
 }

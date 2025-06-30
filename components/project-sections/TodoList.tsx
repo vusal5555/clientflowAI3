@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Trash2, User } from "lucide-react";
 import TodoDialog from "../todo/TodoDialog";
 import EditTodoDialog from "../todo/EditTodoDialog";
+import { useRouter } from "next/navigation";
 
 export interface TodoItem {
   id: string;
@@ -25,33 +26,11 @@ export interface TodoListProps {
   onTodoChange?: (todos: TodoItem[]) => void;
   className?: string;
   projectId: number;
+  todos: TodoItem[];
 }
 
-const TodoList: React.FC<TodoListProps> = ({
-  initialTodos = [],
-  className,
-  projectId,
-}) => {
-  const [todos, setTodos] = useState<TodoItem[]>(initialTodos);
-
-  const fetchTodos = async () => {
-    try {
-      const response = await fetch(`/api/todos`, {
-        cache: "no-store",
-      });
-      if (response.ok) {
-        const todosData = await response.json();
-        setTodos(todosData);
-      }
-    } catch (error) {
-      console.error("Error fetching todos:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
+const TodoList: React.FC<TodoListProps> = ({ className, projectId, todos }) => {
+  const router = useRouter();
   const deleteTodo = async (id: number) => {
     try {
       const response = await fetch(`/api/todos/${id}`, {
@@ -60,11 +39,7 @@ const TodoList: React.FC<TodoListProps> = ({
 
       if (response.ok) {
         // Remove the todo from local state immediately
-        setTodos((prevTodos) =>
-          prevTodos.filter((todo) => Number(todo.id) !== id)
-        );
-
-        fetchTodos();
+        router.refresh();
       } else {
         console.error("Failed to delete todo");
       }
@@ -87,7 +62,7 @@ const TodoList: React.FC<TodoListProps> = ({
         {/* Add new todo */}
         <div className="space-y-3">
           <div className="flex gap-2">
-            <TodoDialog projectId={projectId} fetchTodos={fetchTodos} />
+            <TodoDialog projectId={projectId} todos={todos} />
           </div>
         </div>
 
@@ -136,11 +111,7 @@ const TodoList: React.FC<TodoListProps> = ({
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <EditTodoDialog
-                      projectId={projectId}
-                      fetchTodos={fetchTodos}
-                      id={todo.id}
-                    />
+                    <EditTodoDialog projectId={projectId} id={todo.id} />
                     <Button
                       onClick={() => deleteTodo(Number(todo.id))}
                       size="sm"

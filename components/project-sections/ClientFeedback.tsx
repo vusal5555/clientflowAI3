@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Send, MessageSquare, User, Clock } from "lucide-react";
+import { Input } from "../ui/input";
 
 export interface FeedbackEntry {
   id: string;
@@ -32,7 +33,7 @@ const ClientFeedback: React.FC<ClientFeedbackProps> = ({
   const [feedback, setFeedback] = useState<FeedbackEntry[]>(initialFeedback);
   const [newFeedback, setNewFeedback] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [authorName, setAuthorName] = useState("");
   const handleSubmitFeedback = () => {
     if (newFeedback.trim() && !isSubmitting) {
       setIsSubmitting(true);
@@ -42,8 +43,7 @@ const ClientFeedback: React.FC<ClientFeedbackProps> = ({
         text: newFeedback.trim(),
         timestamp: new Date().toISOString(),
         author: {
-          name: "Client",
-          avatar: "",
+          name: authorName,
         },
       };
 
@@ -98,12 +98,21 @@ const ClientFeedback: React.FC<ClientFeedbackProps> = ({
       <CardContent className="space-y-4">
         {/* Submit Feedback Form */}
         <div className="space-y-3">
+          {/* Input */}
+          <Input
+            value={authorName}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setAuthorName(e.target.value)
+            }
+            onKeyDown={handleKeyPress}
+            placeholder="Your name"
+          />
           <Textarea
             value={newFeedback}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
               setNewFeedback(e.target.value)
             }
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress}
             placeholder="Share your feedback about this project..."
             className="min-h-[100px] resize-none bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-900 dark:text-white"
           />

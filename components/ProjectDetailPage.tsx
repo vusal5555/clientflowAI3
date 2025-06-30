@@ -3,7 +3,7 @@
 import React, { Suspense } from "react";
 import ProjectOverview from "@/components/ProjectOverview";
 import AIStatusUpdates from "@/components/project-sections/AIStatusUpdates";
-import TodoList from "@/components/project-sections/TodoList";
+import TodoList, { TodoItem } from "@/components/project-sections/TodoList";
 import FileUploads, {
   UploadedFile,
 } from "@/components/project-sections/FileUploads";
@@ -14,11 +14,13 @@ import { type Project } from "@/lib/mock-data";
 export interface ProjectDetailPageProps {
   project: Project;
   className?: string;
+  todos: TodoItem[];
 }
 
 const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
   project,
   className,
+  todos,
 }) => {
   const handleRegenerateUpdate = () => {
     console.log("Regenerating AI update for project:", project.id);
@@ -98,6 +100,7 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
               onTodoChange={handleTodoChange}
               projectId={Number(project.id)}
               initialTodos={[]}
+              todos={todos}
             />
           </Suspense>
 

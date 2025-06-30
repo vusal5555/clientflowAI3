@@ -26,6 +26,11 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
     project = null;
   }
 
+  const todos = await fetch("http://localhost:3000/api/todos", {
+    cache: "force-cache",
+    next: { tags: ["todos"] },
+  }).then((res) => res.json());
+
   if (!project || !project.id) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6">
@@ -41,7 +46,7 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
     );
   }
 
-  return <ProjectDetailPage project={project} />;
+  return <ProjectDetailPage project={project} todos={todos} />;
 };
 
 export default ProjectPage;
