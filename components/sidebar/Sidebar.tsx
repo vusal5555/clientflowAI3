@@ -11,6 +11,7 @@ import {
   MessageSquare,
   Settings,
   Home,
+  Users,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -29,9 +30,9 @@ const navigationItems = [
     icon: FolderOpen,
   },
   {
-    name: "Feedback",
-    href: "/feedback",
-    icon: MessageSquare,
+    name: "Clients",
+    href: "/clients",
+    icon: Users,
   },
   {
     name: "Settings",
@@ -74,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
               <Button
                 variant={isActive ? "secondary" : "ghost"}
                 className={cn(
-                  "w-full justify-start space-x-3 h-12 transition-all duration-200",
+                  "w-full justify-start space-x-3 h-12 transition-all duration-200 cursor-pointer",
                   isActive
                     ? "bg-gradient-to-r from-blue-500/10 to-purple-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 shadow-sm"
                     : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50"

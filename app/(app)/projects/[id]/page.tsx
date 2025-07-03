@@ -1,6 +1,5 @@
 import ProjectDetailPage from "@/components/ProjectDetailPage";
 import React from "react";
-import { mockProjects } from "@/lib/mock-data";
 
 const ProjectPage = async ({ params }: { params: { id: string } }) => {
   const { id } = await params;

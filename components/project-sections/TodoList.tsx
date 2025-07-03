@@ -12,7 +12,11 @@ import { useRouter } from "next/navigation";
 export interface TodoItem {
   id: string;
   title: string;
+  description?: string;
   status: "todo" | "in_progress" | "done";
+  completed: boolean;
+  priority: "low" | "medium" | "high";
+  projectId: number;
   assignedTo?: {
     id: string;
     name: string;
