@@ -80,8 +80,24 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
     router.refresh();
   };
 
-  const handleFileDownload = (file: UploadedFile) => {
-    console.log("File downloaded:", file.name);
+  const handleFileDownload = async (file: FileType) => {
+    const response = await fetch(`/api/files/download?imageUrl=${file.url}`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Download failed:", errorData);
+      return;
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file.fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
   };
 
   const handleFeedbackSubmit = (feedback: string) => {
