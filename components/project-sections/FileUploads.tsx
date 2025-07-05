@@ -13,6 +13,7 @@ import {
   Calendar,
   FolderOpen,
 } from "lucide-react";
+import { File as FileType } from "@/drizzle/schema";
 
 export interface UploadedFile {
   id?: string;
@@ -25,8 +26,9 @@ export interface UploadedFile {
 
 export interface FileUploadsProps {
   initialFiles?: UploadedFile[];
+  files?: FileType[];
   onFileUpload?: (file: File) => void;
-  onFileDelete?: (fileId: string) => void;
+  onFileDelete?: (fileId: string, fileName: string) => void;
   onFileDownload?: (file: UploadedFile) => void;
   className?: string;
 }
@@ -37,8 +39,8 @@ const FileUploads: React.FC<FileUploadsProps> = ({
   onFileDelete,
   onFileDownload,
   className,
+  files,
 }) => {
-  const [files, setFiles] = useState<UploadedFile[]>(initialFiles);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -84,8 +86,6 @@ const FileUploads: React.FC<FileUploadsProps> = ({
         size: file.size,
         uploadedAt: new Date().toISOString(),
       };
-      const updatedFiles = [...files, newFile];
-      setFiles(updatedFiles);
 
       if (onFileUpload) {
         onFileUpload(file);
@@ -93,12 +93,9 @@ const FileUploads: React.FC<FileUploadsProps> = ({
     }
   };
 
-  const handleDeleteFile = (fileId: string) => {
-    const updatedFiles = files.filter((file) => file.id !== fileId);
-    setFiles(updatedFiles);
-
+  const handleDeleteFile = (fileId: string, fileName: string) => {
     if (onFileDelete) {
-      onFileDelete(fileId);
+      onFileDelete(fileId, fileName);
     }
   };
 
@@ -137,9 +134,6 @@ const FileUploads: React.FC<FileUploadsProps> = ({
       };
 
       console.log(newFile);
-
-      const updatedFiles = [...files, newFile];
-      setFiles(updatedFiles);
 
       if (onFileUpload) {
         onFileUpload(file);
@@ -199,7 +193,7 @@ const FileUploads: React.FC<FileUploadsProps> = ({
         </div>
 
         {/* Files Grid */}
-        {files.length === 0 ? (
+        {files?.length === 0 ? (
           <div className="text-center py-8">
             <FolderOpen className="h-12 w-12 mx-auto mb-3 text-slate-400" />
             <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -208,45 +202,52 @@ const FileUploads: React.FC<FileUploadsProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {files.map((file, index) => (
+            {files?.map((file, index) => (
               <div
                 key={index}
                 className="p-3 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 hover:shadow-sm transition-all duration-200"
               >
                 <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0">{getFileIcon(file.type)}</div>
+                  <div className="flex-shrink-0">
+                    {getFileIcon(file.fileName)}
+                  </div>
 
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
-                      {file.name}
+                      {file.fileName}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
                       <Badge variant="secondary" className="text-xs">
-                        {getFileTypeLabel(file.type)}
+                        {getFileTypeLabel(file.fileName)}
                       </Badge>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
-                        {formatFileSize(file.size)}
-                      </span>
+                      {/* <span className="text-xs text-slate-500 dark:text-slate-400">
+                        {formatFileSize(file.size || 0)}
+                      </span> */}
                     </div>
                     <div className="flex items-center gap-1 mt-1">
                       <Calendar className="h-3 w-3 text-slate-400" />
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
-                        {formatDate(file.uploadedAt)}
-                      </span>
+                      {/* <span className="text-xs text-slate-500 dark:text-slate-400">
+                        {formatDate(file.createdAt?.toISOString() || "")}
+                      </span> */}
                     </div>
                   </div>
 
                   <div className="flex gap-1">
-                    <Button
+                    {/* <Button
                       onClick={() => handleDownloadFile(file)}
                       size="sm"
                       variant="ghost"
                       className="h-7 w-7 p-0 text-slate-400 hover:text-blue-500"
                     >
                       <Download className="h-4 w-4" />
-                    </Button>
+                    </Button> */}
                     <Button
-                      onClick={() => handleDeleteFile(file?.id || "")}
+                      onClick={() =>
+                        handleDeleteFile(
+                          file.id?.toString() || "",
+                          file.fileName
+                        )
+                      }
                       size="sm"
                       variant="ghost"
                       className="h-7 w-7 p-0 text-slate-400 hover:text-red-500"

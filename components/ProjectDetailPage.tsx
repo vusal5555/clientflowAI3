@@ -10,18 +10,24 @@ import FileUploads, {
 import ClientFeedback from "@/components/project-sections/ClientFeedback";
 import ShareButton from "@/components/project-sections/ShareButton";
 import { type Project } from "@/lib/mock-data";
+import { File as FileType } from "@/drizzle/schema";
+import { useRouter } from "next/navigation";
 
 export interface ProjectDetailPageProps {
   project: Project;
   className?: string;
   todos: TodoItem[];
+  files: FileType[];
 }
 
 const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
   project,
   className,
   todos,
+  files,
 }) => {
+  const router = useRouter();
+
   const handleRegenerateUpdate = () => {
     console.log("Regenerating AI update for project:", project.id);
   };
@@ -51,10 +57,27 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
     }
 
     await response.json();
+
+    router.refresh();
   };
 
-  const handleFileDelete = (fileId: string) => {
-    console.log("File deleted:", fileId);
+  const handleFileDelete = async (fileId: string, fileName: string) => {
+    console.log("File deleted:", fileId, fileName);
+
+    const response = await fetch(`/api/files`, {
+      method: "DELETE",
+      body: JSON.stringify({ id: fileId, fileName: fileName }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Delete failed:", errorData);
+      return;
+    }
+
+    await response.json();
+
+    router.refresh();
   };
 
   const handleFileDownload = (file: UploadedFile) => {
@@ -124,6 +147,7 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
             onFileUpload={handleFileUpload}
             onFileDelete={handleFileDelete}
             onFileDownload={handleFileDownload}
+            files={files}
           />
 
           {/* Client Feedback */}

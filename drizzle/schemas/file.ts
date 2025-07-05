@@ -21,3 +21,5 @@ export const files = pgTable("files", {
     .notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+export type File = typeof files.$inferSelect;
