@@ -34,8 +34,23 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
     console.log("Todo changed");
   };
 
-  const handleFileUpload = (file: File) => {
-    console.log("File uploaded:", file.name);
+  const handleFileUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("projectId", project.id);
+
+    const response = await fetch("/api/files", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Upload failed:", errorData);
+      return;
+    }
+
+    await response.json();
   };
 
   const handleFileDelete = (fileId: string) => {

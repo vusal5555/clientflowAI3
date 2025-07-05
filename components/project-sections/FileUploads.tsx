@@ -13,10 +13,9 @@ import {
   Calendar,
   FolderOpen,
 } from "lucide-react";
-import Image from "next/image";
 
 export interface UploadedFile {
-  id: string;
+  id?: string;
   name: string;
   type: string;
   size: number;
@@ -45,19 +44,9 @@ const FileUploads: React.FC<FileUploadsProps> = ({
 
   const getFileIcon = (type: string) => {
     if (type.includes("image"))
-      return (
-        <Image
-          className="h-6 w-6 text-blue-500"
-          width={50}
-          height={50}
-          alt="Image"
-          src={"/images/file-icons/image.png"}
-        />
-      );
+      return <FileText className="h-6 w-6 text-blue-500" />;
     if (type.includes("pdf"))
       return <FileText className="h-6 w-6 text-red-500" />;
-    if (type.includes("figma") || type.includes("design"))
-      return <File className="h-6 w-6 text-purple-500" />;
     if (type.includes("figma") || type.includes("design"))
       return <File className="h-6 w-6 text-purple-500" />;
     return <File className="h-6 w-6 text-slate-500" />;
@@ -83,18 +72,18 @@ const FileUploads: React.FC<FileUploadsProps> = ({
     return new Date(dateString).toLocaleDateString();
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const fileList = event.target.files;
     if (fileList && fileList.length > 0) {
       const file = fileList[0];
       const newFile: UploadedFile = {
-        id: Date.now().toString(),
         name: file.name,
         type: file.type || "application/octet-stream",
         size: file.size,
         uploadedAt: new Date().toISOString(),
       };
-
       const updatedFiles = [...files, newFile];
       setFiles(updatedFiles);
 
@@ -147,6 +136,8 @@ const FileUploads: React.FC<FileUploadsProps> = ({
         uploadedAt: new Date().toISOString(),
       };
 
+      console.log(newFile);
+
       const updatedFiles = [...files, newFile];
       setFiles(updatedFiles);
 
@@ -192,7 +183,7 @@ const FileUploads: React.FC<FileUploadsProps> = ({
             type="file"
             onChange={handleFileUpload}
             className="hidden"
-            accept="image/*,.pdf,.fig,.figx,.sketch,.xd"
+            accept="image/*,.pdf,.fig,jpeg,jpg,png,gif,figx,.sketch,.xd"
           />
           <Button
             variant="outline"
@@ -217,9 +208,9 @@ const FileUploads: React.FC<FileUploadsProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {files.map((file) => (
+            {files.map((file, index) => (
               <div
-                key={file.id}
+                key={index}
                 className="p-3 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 hover:shadow-sm transition-all duration-200"
               >
                 <div className="flex items-start gap-3">
@@ -255,7 +246,7 @@ const FileUploads: React.FC<FileUploadsProps> = ({
                       <Download className="h-4 w-4" />
                     </Button>
                     <Button
-                      onClick={() => handleDeleteFile(file.id)}
+                      onClick={() => handleDeleteFile(file?.id || "")}
                       size="sm"
                       variant="ghost"
                       className="h-7 w-7 p-0 text-slate-400 hover:text-red-500"
