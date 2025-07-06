@@ -15,9 +15,7 @@ export const todos = pgTable("todos", {
     .references(() => projects.id)
     .notNull(),
   title: varchar("title", { length: 255 }).notNull(),
-  status: text("status", { enum: ["todo", "in_progress", "done"] }).default(
-    "todo"
-  ),
+  status: text("status").default("todo"),
   createdBy: integer("created_by")
     .references(() => user.id)
     .notNull(),

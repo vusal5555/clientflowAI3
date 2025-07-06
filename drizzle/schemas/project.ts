@@ -9,9 +9,10 @@ export const projects = pgTable("projects", {
     .notNull(),
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description"),
-  status: text("status", { enum: ["active", "completed", "archived"] }).default(
-    "active"
-  ),
+  clientName: varchar("client_name", { length: 255 }),
+  status: text("status", {
+    enum: ["active", "completed", "archived", "awaiting-feedback"],
+  }).default("active"),
   priority: text("priority", { enum: ["low", "medium", "high"] }).default(
     "medium"
   ),

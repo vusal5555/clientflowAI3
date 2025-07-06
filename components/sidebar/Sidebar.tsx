@@ -12,6 +12,8 @@ import {
   Settings,
   Home,
   Users,
+  FileText,
+  Bell,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -28,6 +30,16 @@ const navigationItems = [
     name: "Projects",
     href: "/projects",
     icon: FolderOpen,
+  },
+  {
+    name: "Files",
+    href: "/files",
+    icon: FileText,
+  },
+  {
+    name: "Feedback",
+    href: "/feedback",
+    icon: MessageSquare,
   },
   {
     name: "Clients",
@@ -67,7 +79,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-2 p-4">
+      <nav className="flex-1 space-y-1 p-4">
         {navigationItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -75,7 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
               <Button
                 variant={isActive ? "secondary" : "ghost"}
                 className={cn(
-                  "w-full justify-start space-x-3 h-12 transition-all duration-200 cursor-pointer",
+                  "w-full justify-start space-x-3 h-12 transition-all duration-200 cursor-pointer rounded-xl",
                   isActive
                     ? "bg-gradient-to-r from-blue-500/10 to-purple-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 shadow-sm"
                     : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50"
@@ -90,11 +102,31 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
                   )}
                 />
                 <span className="font-medium">{item.name}</span>
+                {item.name === "Feedback" && (
+                  <div className="ml-auto">
+                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                  </div>
+                )}
               </Button>
             </Link>
           );
         })}
       </nav>
+
+      {/* Quick Actions */}
+      <div className="p-4 border-t border-slate-200 dark:border-slate-700">
+        <div className="space-y-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full justify-start space-x-2 h-10 text-xs"
+          >
+            <Bell className="h-4 w-4" />
+            <span>Notifications</span>
+            <div className="ml-auto w-2 h-2 bg-blue-500 rounded-full" />
+          </Button>
+        </div>
+      </div>
 
       {/* Footer */}
       <div className="p-4 border-t border-slate-200 dark:border-slate-700">

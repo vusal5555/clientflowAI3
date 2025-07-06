@@ -2,6 +2,7 @@ export interface Project {
   id: string;
   title: string;
   description: string;
+  clientName?: string;
   status: "active" | "completed" | "on-hold" | "cancelled";
   progress: number;
   dueDate: string;
@@ -16,6 +17,7 @@ export const mockProjects: Project[] = [
     title: "E-commerce Platform Redesign",
     description:
       "Complete redesign of the main e-commerce platform with modern UI/UX and improved performance.",
+    clientName: "TechCorp Inc.",
     status: "active",
     progress: 75,
     dueDate: "Dec 15, 2024",
@@ -27,6 +29,7 @@ export const mockProjects: Project[] = [
     title: "Mobile App Development",
     description:
       "Native mobile application for iOS and Android platforms with offline capabilities.",
+    clientName: "StartupXYZ",
     status: "active",
     progress: 45,
     dueDate: "Jan 20, 2025",
@@ -38,6 +41,7 @@ export const mockProjects: Project[] = [
     title: "API Integration Project",
     description:
       "Integration of third-party APIs for payment processing and shipping calculations.",
+    clientName: "Global Retail",
     status: "completed",
     progress: 100,
     dueDate: "Nov 30, 2024",
@@ -49,6 +53,7 @@ export const mockProjects: Project[] = [
     title: "Data Analytics Dashboard",
     description:
       "Real-time analytics dashboard with interactive charts and reporting features.",
+    clientName: "DataFlow Solutions",
     status: "on-hold",
     progress: 30,
     dueDate: "Feb 10, 2025",
@@ -60,6 +65,7 @@ export const mockProjects: Project[] = [
     title: "Security Audit Implementation",
     description:
       "Comprehensive security audit and implementation of new security protocols.",
+    clientName: "SecureNet Ltd.",
     status: "active",
     progress: 60,
     dueDate: "Jan 5, 2025",
@@ -71,6 +77,7 @@ export const mockProjects: Project[] = [
     title: "Legacy System Migration",
     description:
       "Migration of legacy systems to modern cloud infrastructure with zero downtime.",
+    clientName: "Enterprise Corp",
     status: "cancelled",
     progress: 20,
     dueDate: "Mar 1, 2025",

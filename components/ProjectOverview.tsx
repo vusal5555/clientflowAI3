@@ -15,8 +15,15 @@ export interface ProjectOverviewProps {
   id: string;
   title: string;
   description: string;
+  clientName?: string;
   progress: number;
-  status: "active" | "completed" | "archived" | "on-hold" | "cancelled";
+  status:
+    | "active"
+    | "completed"
+    | "archived"
+    | "on-hold"
+    | "cancelled"
+    | "awaiting-feedback";
   priority: "high" | "medium" | "low";
   dueDate: string;
   teamSize: number;
@@ -49,6 +56,11 @@ const statusConfig = {
     variant: "destructive" as const,
     color: "bg-red-500",
   },
+  "awaiting-feedback": {
+    label: "Awaiting Feedback",
+    variant: "secondary" as const,
+    color: "bg-yellow-500",
+  },
 };
 
 const priorityConfig = {
@@ -60,6 +72,7 @@ const priorityConfig = {
 const ProjectOverview: React.FC<ProjectOverviewProps> = ({
   title,
   description,
+  clientName,
   progress,
   status,
   priority,
@@ -84,6 +97,14 @@ const ProjectOverview: React.FC<ProjectOverviewProps> = ({
             <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">
               {title}
             </CardTitle>
+            {clientName && (
+              <div className="flex items-center space-x-1">
+                <Users className="w-3 h-3 text-slate-500 dark:text-slate-400" />
+                <span className="text-sm text-slate-600 dark:text-slate-300">
+                  {clientName}
+                </span>
+              </div>
+            )}
             <CardDescription className="text-sm text-slate-600 dark:text-slate-300 line-clamp-2">
               {description}
             </CardDescription>

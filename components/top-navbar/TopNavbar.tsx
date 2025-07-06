@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth.client";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface TopNavbarProps {
   pageTitle?: string;
@@ -24,11 +24,33 @@ interface TopNavbarProps {
 }
 
 const TopNavbar: React.FC<TopNavbarProps> = ({
-  pageTitle = "Dashboard",
+  pageTitle,
   className,
   onMenuClick,
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const getPageTitle = () => {
+    if (pageTitle) return pageTitle;
+
+    switch (pathname) {
+      case "/dashboard":
+        return "Dashboard";
+      case "/projects":
+        return "Projects";
+      case "/files":
+        return "Files";
+      case "/feedback":
+        return "Feedback";
+      case "/clients":
+        return "Clients";
+      case "/settings":
+        return "Settings";
+      default:
+        return "Dashboard";
+    }
+  };
 
   const logout = async () => {
     await authClient.signOut({
@@ -60,7 +82,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
 
         <div className="hidden md:block">
           <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
-            {pageTitle}
+            {getPageTitle()}
           </h1>
         </div>
       </div>
@@ -68,7 +90,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
       {/* Center - Page title for mobile */}
       <div className="md:hidden">
         <h1 className="text-lg font-semibold text-slate-900 dark:text-white">
-          {pageTitle}
+          {getPageTitle()}
         </h1>
       </div>
 
