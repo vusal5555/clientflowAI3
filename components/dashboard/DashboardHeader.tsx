@@ -4,8 +4,11 @@ import React from "react";
 import CreateProjectDialog from "../CreateProjectDialog";
 import { Button } from "@/components/ui/button";
 import { Plus, Calendar, TrendingUp } from "lucide-react";
+import { User } from "@/drizzle/schemas/user";
 
-const DashboardHeader = () => {
+const DashboardHeader = ({ user }: { user: User[] }) => {
+  console.log(user);
+
   const currentDate = new Date();
   const greeting = () => {
     const hour = currentDate.getHours();
@@ -20,7 +23,7 @@ const DashboardHeader = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-            {greeting()}, John! 👋
+            {greeting()}, {user[0].name || "User"}! 👋
           </h1>
           <p className="text-slate-600 dark:text-slate-300">
             Here's what's happening with your projects today

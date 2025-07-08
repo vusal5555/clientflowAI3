@@ -5,6 +5,7 @@ import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import DashboardStats from "@/components/dashboard/DashboardStats";
 import QuickOverviewCards from "@/components/dashboard/QuickOverviewCards";
 import AIInsightsSection from "@/components/dashboard/AIInsightsSection";
+import getUser from "@/actions/getUser";
 
 const DashboardPage = async () => {
   // Use absolute URL for server-side fetch
@@ -24,11 +25,13 @@ const DashboardPage = async () => {
     throw error;
   }
 
+  const user = await getUser();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <div className="p-6 space-y-8">
         {/* Header Section */}
-        <DashboardHeader />
+        <DashboardHeader user={user} />
 
         {/* Quick Overview Cards */}
         <QuickOverviewCards projects={projects} />

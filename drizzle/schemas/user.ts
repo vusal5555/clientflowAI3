@@ -59,3 +59,5 @@ export const verification = pgTable("verification", {
     () => /* @__PURE__ */ new Date()
   ),
 });
+
+export type User = typeof user.$inferSelect;

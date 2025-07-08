@@ -16,6 +16,14 @@ export async function POST(request: NextRequest) {
   const { title, description, status, priority, dueDate } =
     await request.json();
 
+  console.log("Creating project for user:", session.user.id, {
+    title,
+    description,
+    status,
+    priority,
+    dueDate,
+  });
+
   try {
     const project = await db.insert(projects).values({
       userId: session.user.id,
@@ -25,6 +33,7 @@ export async function POST(request: NextRequest) {
       priority,
       dueDate: dueDate ? new Date(dueDate) : null,
     });
+    console.log("Project created:", project);
     revalidatePath("/");
     return NextResponse.json(project);
   } catch (error) {
@@ -37,13 +46,43 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const projectsData = await db.select().from(projects);
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
 
-  if (!projectsData) {
-    return NextResponse.json({ message: "No projects found" }, { status: 404 });
+    if (!session) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    console.log("Fetching projects for user:", session.user.id);
+
+    // Try a more explicit query approach
+    const projectsData = await db
+      .select({
+        id: projects.id,
+        userId: projects.userId,
+        title: projects.title,
+        description: projects.description,
+        clientName: projects.clientName,
+        status: projects.status,
+        priority: projects.priority,
+        dueDate: projects.dueDate,
+        progress: projects.progress,
+        createdAt: projects.createdAt,
+        updatedAt: projects.updatedAt,
+      })
+      .from(projects)
+      .where(eq(projects.userId, session.user.id));
+
+    console.log("Found projects:", projectsData.length, projectsData);
+
+    return NextResponse.json(projectsData);
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
   }
-
-  return NextResponse.json(projectsData);
 }
 
 export async function DELETE(request: NextRequest) {
