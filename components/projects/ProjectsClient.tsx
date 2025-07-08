@@ -22,6 +22,23 @@ export function ProjectsClient({ initialProjects }: ProjectsClientProps) {
     setFilteredProjects(initialProjects);
   }, [initialProjects]);
 
+  // Refresh projects from server
+  const refreshProjects = async () => {
+    try {
+      const response = await fetch("/api/projects");
+      if (response.ok) {
+        const updatedProjects = await response.json();
+        const projectsArray = Array.isArray(updatedProjects)
+          ? updatedProjects
+          : [];
+        setProjects(projectsArray);
+        setFilteredProjects(projectsArray);
+      }
+    } catch (error) {
+      console.error("Error refreshing projects:", error);
+    }
+  };
+
   const handleFilteredProjectsChange = (newFilteredProjects: Project[]) => {
     setFilteredProjects(newFilteredProjects);
   };
@@ -32,7 +49,7 @@ export function ProjectsClient({ initialProjects }: ProjectsClientProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6">
-      <ProjectsHeader />
+      <ProjectsHeader onProjectCreated={refreshProjects} />
       <ProjectsFilters
         projects={projects}
         onFilteredProjectsChange={handleFilteredProjectsChange}
@@ -40,13 +57,17 @@ export function ProjectsClient({ initialProjects }: ProjectsClientProps) {
         onViewModeChange={handleViewModeChange}
       />
 
-      {viewMode === "grid" ? (
-        <ProjectsGrid projects={filteredProjects} />
+      {!filteredProjects || filteredProjects.length === 0 ? (
+        <ProjectsEmptyState projects={filteredProjects || []} />
       ) : (
-        <ProjectsList projects={filteredProjects} />
+        <>
+          {viewMode === "grid" ? (
+            <ProjectsGrid projects={filteredProjects} />
+          ) : (
+            <ProjectsList projects={filteredProjects} />
+          )}
+        </>
       )}
-
-      <ProjectsEmptyState projects={filteredProjects} />
     </div>
   );
 }

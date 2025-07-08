@@ -1,8 +1,11 @@
 import ProjectDetailPage from "@/components/ProjectDetailPage";
 import React from "react";
 
+import { cookies } from "next/headers";
+
 const ProjectPage = async ({ params }: { params: { id: string } }) => {
   const { id } = await params;
+  const cookieStore = await cookies();
 
   let project;
   try {
@@ -11,7 +14,10 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
       }/api/projects/${id}`,
       {
-        cache: "force-cache",
+        cache: "no-store",
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
       }
     );
 
@@ -26,13 +32,19 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
   }
 
   const todos = await fetch("http://localhost:3000/api/todos", {
-    cache: "force-cache",
+    cache: "no-store",
     next: { tags: ["todos"] },
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
   }).then((res) => res.json());
 
   const files = await fetch("http://localhost:3000/api/files", {
-    cache: "force-cache",
+    cache: "no-store",
     next: { tags: ["files"] },
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
   }).then((res) => res.json());
 
   if (!project || !project.id) {

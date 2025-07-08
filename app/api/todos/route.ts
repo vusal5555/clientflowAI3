@@ -28,12 +28,26 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const todosResult = await db
-    .select()
-    .from(todos)
-    .orderBy(desc(todos.createdAt));
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
 
-  revalidateTag("todos");
+    if (!session) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
 
-  return NextResponse.json(todosResult);
+    const todosResult = await db
+      .select()
+      .from(todos)
+      .orderBy(desc(todos.createdAt));
+
+    revalidateTag("todos");
+
+    return NextResponse.json(todosResult);
+  } catch (error) {
+    console.error("Error fetching todos:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }

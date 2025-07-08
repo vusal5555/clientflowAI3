@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { ProjectCard } from "./ProjectCard";
 import { Project } from "./types";
+import { ProjectsEmptyState } from "./ProjectsEmptyState";
 
 interface ProjectsGridProps {
   projects: Project[];

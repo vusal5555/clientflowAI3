@@ -6,14 +6,19 @@ import DashboardStats from "@/components/dashboard/DashboardStats";
 import QuickOverviewCards from "@/components/dashboard/QuickOverviewCards";
 import AIInsightsSection from "@/components/dashboard/AIInsightsSection";
 import getUser from "@/actions/getUser";
+import { cookies } from "next/headers";
 
 const DashboardPage = async () => {
   // Use absolute URL for server-side fetch
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const cookieStore = await cookies();
 
   let projects = [];
   try {
     const response = await fetch(`${baseUrl}/api/projects`, {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
       cache: "force-cache",
     });
     if (!response.ok) {
@@ -25,7 +30,12 @@ const DashboardPage = async () => {
     throw error;
   }
 
-  const user = await getUser();
+  const user = await fetch(`${baseUrl}/api/getUser`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+    cache: "force-cache",
+  }).then((res) => res.json());
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
@@ -53,7 +63,7 @@ const DashboardPage = async () => {
             </a>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.slice(0, 6).map((project: Project) => (
+            {projects.slice(0, 3).map((project: Project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </div>

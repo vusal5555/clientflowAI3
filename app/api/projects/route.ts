@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
       dueDate: dueDate ? new Date(dueDate) : null,
     });
     console.log("Project created:", project);
+    revalidatePath("/projects");
     revalidatePath("/");
     return NextResponse.json(project);
   } catch (error) {
@@ -53,8 +54,6 @@ export async function GET() {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    console.log("Fetching projects for user:", session.user.id);
-
     // Try a more explicit query approach
     const projectsData = await db
       .select({
@@ -73,8 +72,6 @@ export async function GET() {
       .from(projects)
       .where(eq(projects.userId, session.user.id));
 
-    console.log("Found projects:", projectsData.length, projectsData);
-
     return NextResponse.json(projectsData);
   } catch (error) {
     console.error("Error fetching projects:", error);
@@ -90,6 +87,9 @@ export async function DELETE(request: NextRequest) {
 
   const project = await db.delete(projects).where(eq(projects.id, id));
 
+  revalidatePath("/projects");
+  revalidatePath("/");
+
   return NextResponse.json(project);
 }
 
@@ -100,6 +100,9 @@ export async function PUT(request: NextRequest) {
     .update(projects)
     .set(data)
     .where(eq(projects.id, id));
+
+  revalidatePath("/projects");
+  revalidatePath("/");
 
   return NextResponse.json(project);
 }

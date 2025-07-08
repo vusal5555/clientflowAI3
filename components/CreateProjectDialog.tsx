@@ -31,8 +31,15 @@ import {
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
-const CreateProjectDialog = () => {
+interface CreateProjectDialogProps {
+  onProjectCreated?: () => void;
+}
+
+const CreateProjectDialog = ({
+  onProjectCreated,
+}: CreateProjectDialogProps) => {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -42,7 +49,7 @@ const CreateProjectDialog = () => {
     dueDate: null as Date | null,
   });
   const [isLoading, setIsLoading] = useState(false);
-
+  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -70,8 +77,8 @@ const CreateProjectDialog = () => {
           dueDate: null,
         });
         setOpen(false);
-        // You might want to refresh the projects list here
-        window.location.reload();
+        router.refresh();
+        onProjectCreated?.();
       } else {
         console.error("Failed to create project");
       }

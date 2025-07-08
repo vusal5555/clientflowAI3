@@ -2,7 +2,11 @@
 import { Plus } from "lucide-react";
 import CreateProjectDialog from "../CreateProjectDialog";
 
-export function ProjectsHeader() {
+interface ProjectsHeaderProps {
+  onProjectCreated?: () => void;
+}
+
+export function ProjectsHeader({ onProjectCreated }: ProjectsHeaderProps) {
   return (
     <div className="mb-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -16,7 +20,7 @@ export function ProjectsHeader() {
         </div>
 
         {/* New Project Button */}
-        <CreateProjectDialog />
+        <CreateProjectDialog onProjectCreated={onProjectCreated} />
       </div>
     </div>
   );

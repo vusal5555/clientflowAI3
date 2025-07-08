@@ -98,9 +98,23 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const filesData = await db.select().from(files);
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
 
-  return NextResponse.json(filesData);
+    if (!session) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const filesData = await db.select().from(files);
+
+    return NextResponse.json(filesData);
+  } catch (error) {
+    console.error("Error fetching files:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }
 
 export const bucketParams = {

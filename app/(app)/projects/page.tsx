@@ -11,33 +11,36 @@ interface Project {
   priority: "high" | "medium" | "low";
 }
 
-async function getProjects(): Promise<Project[]> {
+import { cookies } from "next/headers";
+
+export default async function ProjectsPage() {
   try {
+    const cookieStore = await cookies();
     const response = await fetch(
       `${
         process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
       }/api/projects`,
       {
         cache: "force-cache",
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
       }
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch projects");
+      console.error("Failed to fetch projects:", response.status);
+      return <ProjectsClient initialProjects={[]} />;
     }
 
-    const data = await response.json();
-    console.log(data);
+    const projects = await response.json();
 
-    return data;
+    // Ensure projects is always an array
+    const projectsArray = Array.isArray(projects) ? projects : [];
+
+    return <ProjectsClient initialProjects={projectsArray} />;
   } catch (error) {
     console.error("Error fetching projects:", error);
-    return [];
+    return <ProjectsClient initialProjects={[]} />;
   }
-}
-
-export default async function ProjectsPage() {
-  const projects = await getProjects();
-
-  return <ProjectsClient initialProjects={projects} />;
 }
