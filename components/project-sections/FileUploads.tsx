@@ -15,6 +15,14 @@ import {
   Image,
 } from "lucide-react";
 import { File as FileType } from "@/drizzle/schema";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Project } from "@/lib/mock-data";
 
 export interface UploadedFile {
   id?: string;
@@ -27,10 +35,11 @@ export interface UploadedFile {
 
 export interface FileUploadsProps {
   files?: FileType[];
-  onFileUpload?: (file: File) => void;
+  onFileUpload?: (file: File, projectId?: string) => void;
   onFileDelete?: (fileId: string, fileName: string) => void;
   onFileDownload?: (file: FileType) => void;
   className?: string;
+  projects: Project[];
 }
 
 const FileUploads: React.FC<FileUploadsProps> = ({
@@ -39,8 +48,10 @@ const FileUploads: React.FC<FileUploadsProps> = ({
   onFileDownload,
   className,
   files,
+  projects,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const getFileIcon = (type: string) => {
@@ -79,8 +90,9 @@ const FileUploads: React.FC<FileUploadsProps> = ({
     const fileList = event.target.files;
     if (fileList && fileList.length > 0) {
       const file = fileList[0];
+      console.log("Selected project ID:", selectedProjectId);
       if (onFileUpload) {
-        onFileUpload(file);
+        onFileUpload(file, selectedProjectId);
       }
     }
   };
@@ -118,7 +130,7 @@ const FileUploads: React.FC<FileUploadsProps> = ({
     if (droppedFiles.length > 0) {
       const file = droppedFiles[0];
       if (onFileUpload) {
-        onFileUpload(file);
+        onFileUpload(file, selectedProjectId);
       }
     }
   };
@@ -138,6 +150,27 @@ const FileUploads: React.FC<FileUploadsProps> = ({
       </CardHeader>
 
       <CardContent className="space-y-4">
+        <div className="flex items-center gap-2">
+          <p className="text-sm text-slate-500 dark:text-slate-400">Project:</p>
+        </div>
+        <Select
+          onValueChange={(value) => {
+            console.log("Project selected:", value);
+            setSelectedProjectId(value);
+          }}
+          value={selectedProjectId}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select a project" />
+          </SelectTrigger>
+          <SelectContent>
+            {projects.map((project) => (
+              <SelectItem key={project.id} value={project.id.toString()}>
+                {project.title}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         {/* Upload Area */}
         <div
           className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 cursor-pointer ${
@@ -151,9 +184,16 @@ const FileUploads: React.FC<FileUploadsProps> = ({
           onClick={handleUploadClick}
         >
           <Upload className="h-8 w-8 mx-auto mb-2 text-slate-400" />
-          <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">
+
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
             Drag and drop files here, or click to browse
+          </h3>
+          <p className="text-slate-500 dark:text-slate-400 mb-4">
+            {selectedProjectId
+              ? `Uploading to project: ${selectedProjectId}`
+              : "Please select a project first"}
           </p>
+
           <input
             ref={fileInputRef}
             type="file"

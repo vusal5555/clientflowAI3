@@ -289,6 +289,7 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
                 onFileDelete={handleFileDelete}
                 onFileDownload={handleFileDownload}
                 files={files}
+                projects={[]}
               />
             </CardContent>
           </Card>

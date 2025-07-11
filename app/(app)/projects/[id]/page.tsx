@@ -14,7 +14,7 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
       }/api/projects/${id}`,
       {
-        cache: "no-store",
+        cache: "force-cache",
         headers: {
           Cookie: cookieStore.toString(),
         },
@@ -32,7 +32,7 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
   }
 
   const todos = await fetch("http://localhost:3000/api/todos", {
-    cache: "no-store",
+    cache: "force-cache",
     next: { tags: ["todos"] },
     headers: {
       Cookie: cookieStore.toString(),
@@ -40,7 +40,7 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
   }).then((res) => res.json());
 
   const files = await fetch("http://localhost:3000/api/files", {
-    cache: "no-store",
+    cache: "force-cache",
     next: { tags: ["files"] },
     headers: {
       Cookie: cookieStore.toString(),

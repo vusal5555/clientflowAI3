@@ -2,10 +2,8 @@ import React from "react";
 import ProjectCard from "@/components/project-card";
 import { type Project } from "@/lib/mock-data";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import DashboardStats from "@/components/dashboard/DashboardStats";
 import QuickOverviewCards from "@/components/dashboard/QuickOverviewCards";
 import AIInsightsSection from "@/components/dashboard/AIInsightsSection";
-import getUser from "@/actions/getUser";
 import { cookies } from "next/headers";
 
 const DashboardPage = async () => {
