@@ -13,6 +13,7 @@ import {
   Calendar,
   FolderOpen,
   Image,
+  ArrowRight,
 } from "lucide-react";
 import { File as FileType } from "@/drizzle/schema";
 import {
@@ -23,6 +24,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Project } from "@/lib/mock-data";
+import Link from "next/link";
 
 export interface UploadedFile {
   id?: string;
@@ -53,6 +55,10 @@ const FileUploads: React.FC<FileUploadsProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string>("");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  // Get only the last 3 files
+  const displayFiles = files?.slice(-3) || [];
+  const hasMoreFiles = files && files.length > 3;
 
   const getFileIcon = (type: string) => {
     if (
@@ -150,27 +156,6 @@ const FileUploads: React.FC<FileUploadsProps> = ({
       </CardHeader>
 
       <CardContent className="space-y-4">
-        <div className="flex items-center gap-2">
-          <p className="text-sm text-slate-500 dark:text-slate-400">Project:</p>
-        </div>
-        <Select
-          onValueChange={(value) => {
-            console.log("Project selected:", value);
-            setSelectedProjectId(value);
-          }}
-          value={selectedProjectId}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select a project" />
-          </SelectTrigger>
-          <SelectContent>
-            {projects.map((project) => (
-              <SelectItem key={project.id} value={project.id.toString()}>
-                {project.title}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
         {/* Upload Area */}
         <div
           className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 cursor-pointer ${
@@ -223,65 +208,83 @@ const FileUploads: React.FC<FileUploadsProps> = ({
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {files?.map((file, index) => (
-              <div
-                key={index}
-                className="p-3 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 hover:shadow-sm transition-all duration-200"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0">
-                    {getFileIcon(file.fileName)}
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
-                      {file.fileName}
-                    </p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Badge variant="secondary" className="text-xs">
-                        {getFileTypeLabel(file.fileName)}
-                      </Badge>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {displayFiles.map((file, index) => (
+                <div
+                  key={index}
+                  className="p-3 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 hover:shadow-sm transition-all duration-200"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0">
+                      {getFileIcon(file.fileName)}
                     </div>
-                    <div className="flex items-center gap-1 mt-1">
-                      <Calendar className="h-3 w-3 text-slate-400" />
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
-                        {file?.createdAt
-                          ? typeof file.createdAt === "string"
-                            ? formatDate(file.createdAt)
-                            : formatDate(file.createdAt.toISOString())
-                          : formatDate(new Date().toISOString())}
-                      </span>
-                    </div>
-                  </div>
 
-                  <div className="flex gap-1">
-                    <Button
-                      onClick={() => handleDownloadFile(file)}
-                      size="sm"
-                      variant="ghost"
-                      className="h-7 w-7 p-0 text-slate-400 hover:text-blue-500 cursor-pointer"
-                    >
-                      <Download className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        handleDeleteFile(
-                          file.id?.toString() || "",
-                          file.fileName
-                        )
-                      }
-                      size="sm"
-                      variant="ghost"
-                      className="h-7 w-7 p-0 text-slate-400 hover:text-red-500 cursor-pointer"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
+                        {file.fileName}
+                      </p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Badge variant="secondary" className="text-xs">
+                          {getFileTypeLabel(file.fileName)}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center gap-1 mt-1">
+                        <Calendar className="h-3 w-3 text-slate-400" />
+                        <span className="text-xs text-slate-500 dark:text-slate-400">
+                          {file?.createdAt
+                            ? typeof file.createdAt === "string"
+                              ? formatDate(file.createdAt)
+                              : formatDate(file.createdAt.toISOString())
+                            : formatDate(new Date().toISOString())}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-1">
+                      <Button
+                        onClick={() => handleDownloadFile(file)}
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 w-7 p-0 text-slate-400 hover:text-blue-500 cursor-pointer"
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          handleDeleteFile(
+                            file.id?.toString() || "",
+                            file.fileName
+                          )
+                        }
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 w-7 p-0 text-slate-400 hover:text-red-500 cursor-pointer"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
+              ))}
+            </div>
+
+            {/* View More Button */}
+            {hasMoreFiles && (
+              <div className="flex justify-center mt-4">
+                <Link href="/files">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+                  >
+                    View All Files
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </CardContent>
     </Card>

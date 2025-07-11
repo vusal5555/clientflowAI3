@@ -16,7 +16,7 @@ export const files = pgTable("files", {
     .notNull(),
   url: text("url").notNull(),
   fileName: varchar("file_name", { length: 255 }).notNull(),
-  uploadedBy: integer("uploaded_by")
+  uploadedBy: text("uploaded_by")
     .references(() => user.id)
     .notNull(),
   createdAt: timestamp("created_at").defaultNow(),

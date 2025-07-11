@@ -66,11 +66,19 @@ export async function POST(request: NextRequest) {
     const url = `https://${bucketName}.s3.${process.env.NEXT_AWS_S3_REGION}.amazonaws.com/${file.name}`;
 
     if (response.$metadata.httpStatusCode === 200) {
+      // Check if user is authenticated and has a valid ID
+      if (!session?.user?.id) {
+        return NextResponse.json(
+          { message: "User not authenticated" },
+          { status: 401 }
+        );
+      }
+
       await db.insert(files).values({
         fileName: file.name,
         url: url,
         projectId: Number(projectId),
-        uploadedBy: session?.user.id ? Number(session.user.id) : 0,
+        uploadedBy: session.user.id, // Use the string ID directly since user.id is text
       });
 
       revalidateTag("files");

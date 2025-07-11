@@ -4,28 +4,59 @@ import React from "react";
 import { FileText, Search, Filter, Download, Eye, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import FileUploads from "@/components/project-sections/FileUploads";
 import { File as FileType } from "@/drizzle/schemas/file";
-import { Project } from "@/lib/mock-data";
+import { useRouter } from "next/navigation";
 
-const FileClientWrapper = ({
-  filesData,
-  projects,
-}: {
-  filesData: FileType[];
-  projects: Project[];
-}) => {
-  const onFileUpload = async (file: globalThis.File, projectId?: string) => {
-    console.log(file, projectId);
-  };
+const FileClientWrapper = ({ filesData }: { filesData: FileType[] }) => {
+  const router = useRouter();
 
   const onFileDelete = async (fileId: string, fileName: string) => {
-    console.log(fileId);
+    try {
+      const response = await fetch(`/api/files`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: fileId, fileName: fileName }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Delete failed:", errorData);
+        return;
+      }
+
+      await response.json();
+      router.refresh();
+    } catch (error) {
+      console.error("Delete error:", error);
+    }
   };
 
   const onFileDownload = async (file: FileType) => {
-    console.log(file);
+    try {
+      const response = await fetch(`/api/files/download?imageUrl=${file.url}`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Download failed:", errorData);
+        return;
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = file.fileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download error:", error);
+    }
   };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <div className="p-6 space-y-8">
@@ -93,16 +124,29 @@ const FileClientWrapper = ({
                     by User {file.uploadedBy}
                   </span>
                   <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      onClick={() => onFileDownload(file)}
+                    >
                       <Eye className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      onClick={() => onFileDownload(file)}
+                    >
                       <Download className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
                       className="h-8 w-8 p-0 text-red-500 hover:text-red-600"
+                      onClick={() =>
+                        onFileDelete(file.id?.toString() || "", file.fileName)
+                      }
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -112,14 +156,6 @@ const FileClientWrapper = ({
             </div>
           ))}
         </div>
-
-        {/* Upload Area */}
-        <FileUploads
-          onFileUpload={onFileUpload}
-          onFileDelete={onFileDelete}
-          onFileDownload={onFileDownload}
-          projects={projects}
-        />
       </div>
     </div>
   );

@@ -31,6 +31,9 @@ const FilesPage = async () => {
         Cookie: cookieStore.toString(),
       },
       cache: "force-cache",
+      next: {
+        tags: ["files"],
+      },
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -41,7 +44,7 @@ const FilesPage = async () => {
     throw error;
   }
 
-  return <FileClientWrapper filesData={filesData} projects={projects} />;
+  return <FileClientWrapper filesData={filesData} />;
 };
 
 export default FilesPage;
